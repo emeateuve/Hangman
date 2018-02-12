@@ -1,15 +1,54 @@
 <div class="container">
   <div class="col-lg-6 col-md-6 col-sm-6 col-6 menu">
-    <ul class="nav flex-column">
-      <li class="nav-item">
-        <a class="nav-link" href="#">Buscar partida</a>
-      </li>
-      <li class="nav-item">
-        <a class="nav-link" href="#">Chat global</a>
-      </li>
-      <li class="nav-item">
-        <a class="nav-link" href="#">Cambiar nombre de usuario</a>
-      </li>
-    </ul>
+    <div id="accordion">
+      <div class="card">
+        <div class="card-header" id="headingOne">
+          <h5 class="mb-0">
+            <button class="btn btn-link" data-toggle="collapse" data-target="#collapseOne" aria-expanded="false"
+                    aria-controls="collapseOne">
+              Buscar partida
+            </button>
+          </h5>
+        </div>
+        <div id="collapseOne" class="collapse" aria-labelledby="headingOne" data-parent="#accordion">
+          <div class="card-body">
+            Aski es donde busca uste partida
+          </div>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-header" id="headingTwo">
+          <h5 class="mb-0">
+            <button class="btn btn-link" routerLink="/">
+              Cambiar nombre de usuario
+            </button>
+          </h5>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-header" id="headingThree">
+          <h5 class="mb-0">
+            <button class="btn btn-link" routerLink="/chatglobal">
+              Chat global
+            </button>
+          </h5>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-header" id="headingFour">
+          <h5 class="mb-0">
+            <button class="btn btn-link" data-toggle="collapse" data-target="#collapseFour" aria-expanded="false"
+                    aria-controls="collapseFour">
+              Cambiar imagen de usuario
+            </button>
+          </h5>
+        </div>
+        <div id="collapseFour" class="collapse" aria-labelledby="headingFour" data-parent="#accordion">
+          <div class="card-body">
+           jeje
+          </div>
+        </div>
+      </div>
+    </div>
   </div>
 </div>
