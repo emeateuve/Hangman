@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { ChatService} from "../chat.service";
 
 @Component({
   selector: 'app-chatglobal',
@@ -6,10 +7,24 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./chatglobal.component.css']
 })
 export class ChatglobalComponent implements OnInit {
+  message: string;
+  messages: string[] = [];
 
-  constructor() { }
+  constructor(private chatService: ChatService) {
+
+  }
 
   ngOnInit() {
+    this.chatService
+      .getMessages()
+      .subscribe((message: string) => {
+      this.messages.push(message);
+      })
+  }
+
+  sendMessage() {
+    this.chatService.sendMessage(this.message);
+    this.message = '';
   }
 
 }
