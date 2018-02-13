@@ -1,0 +1,16 @@
+.abecedario button:active{
+  background-color: transparent;
+  color: #fff;
+}
+
+.abecedario ul li{
+  text-decoration: none;
+  display: inline-block;
+  margin-left:2px;
+  font-size: 24em;
+}
+
+.abecedario ul{
+  display: inline-block;
+  width:100%;
+}

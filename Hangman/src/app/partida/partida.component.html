@@ -1,1 +1,13 @@
-<h1 style="color: #fff;">PARTIDA</h1>
+<div class="container-fluid">
+  <div class="row">
+    <div class="col-lg-12 col-xl-12 col-md-12 col-sm-12 col-12 abecedario">
+      <button *ngFor="let item of abecedario" type="button" (click)="adivinaLetra(item)">{{item}}</button>
+      <ul>
+        <li *ngFor="let letra of palabra"><a *ngIf="!existe">_</a><a *ngIf="existe">{{letra}}</a></li>
+      </ul>
+
+      <input type="text" [(ngModel)]="textoInput">
+      <button type="button" (click)="palabraRecibida()">Enviar</button>
+    </div>
+  </div>
+</div>
