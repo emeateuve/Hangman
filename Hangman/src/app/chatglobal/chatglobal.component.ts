@@ -1,5 +1,5 @@
-import { Component, OnInit } from '@angular/core';
-import { ChatService} from "../chat.service";
+import {Component, OnInit} from '@angular/core';
+import {ChatService} from "../chat.service";
 
 @Component({
   selector: 'app-chatglobal',
@@ -9,19 +9,23 @@ import { ChatService} from "../chat.service";
 export class ChatglobalComponent implements OnInit {
   message: string;
   messages: string[] = [];
-
+  array_usuarios = [];
 
   constructor(private chatService: ChatService) {
-
   }
 
   ngOnInit() {
+    this.array_usuarios = this.chatService.arrayUsuarios
     this.chatService.getMessages().subscribe((message: string) => {
       this.messages.push(message);
-      });
-
-    this.chatService.usuarioDesconectado().subscribe((data) =>{
-      this.messages.push(data.msg)
+    });
+    this.chatService.usuarioDesconectado().subscribe((data) => {
+      this.messages.push(data.msg);
+      this.array_usuarios = (data.array)
+    });
+    this.chatService.usuarioConectado().subscribe((data) => {
+      console.log("en el componente", data);
+      this.array_usuarios = data;
     });
   }
 
@@ -29,8 +33,6 @@ export class ChatglobalComponent implements OnInit {
     this.chatService.sendMessage(this.message);
     this.message = '';
   }
-
-
 
 
 }

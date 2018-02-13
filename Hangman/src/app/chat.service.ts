@@ -23,7 +23,7 @@ export class ChatService {
       this.socket.on('consoleusuario', (data) => {
         observer.next(data)
         this.arrayUsuarios = data.array
-        console.log(this.arrayUsuarios)
+
       })
     });
   };
@@ -45,6 +45,16 @@ export class ChatService {
       this.socket.on('desconexion', (data) => {
         observer.next(data);
         this.arrayUsuarios = data.array;
+      })
+    })
+  }
+
+  public usuarioConectado = () => {
+    return Observable.create((observer) => {
+      this.socket.on('usuarioConectado', function (data){
+        observer.next(data);
+        this.arrayUsuarios = data;
+        console.log('nueva conexión: ',this.arrayUsuarios)
       })
     })
   }

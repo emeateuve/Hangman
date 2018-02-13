@@ -16,7 +16,7 @@ io.on('connection', (socket) => {
 
   socket.on('new-message', (message) => {
     console.log(message);
-    io.emit(message);
+    io.emit('new-message', socket.nombre_usuario + ": " + message);
   });
 
   socket.on('confirmarUsuario', (usuario) => {
@@ -28,8 +28,12 @@ io.on('connection', (socket) => {
       arrayUsuarios.push(usuario.toLowerCase());
       socket.nombre_usuario = usuario.toLowerCase();
       socket.emit('consoleusuario', {usuario: usuario, array: arrayUsuarios});
+      io.emit('usuarioConectado', arrayUsuarios);
+      console.log(arrayUsuarios)
     }
   })
+
+
   socket.on('disconnect', function () {
     let pos = arrayUsuarios.indexOf(socket.nombre_usuario);
     arrayUsuarios.splice(pos, 1)

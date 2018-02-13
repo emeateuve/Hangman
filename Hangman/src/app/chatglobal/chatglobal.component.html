@@ -9,13 +9,14 @@
             {{message}}
           </li>
         </ul>
+
       </div>
       <div class="col-xl-3 col-lg-3 col-md-3 col-sm-3 col-3 usuarios">
         <p>Usuarios</p>
         <hr>
         <ul>
-          <li *ngFor="let usuario of chatService.arrayUsuarios">
-            {{usuario}}
+          <li *ngFor="let usu of array_usuarios">
+            {{usu}}
           </li>
         </ul>
       </div>
@@ -23,9 +24,10 @@
     <div class="row">
       <div class="col-xl-11 col-lg-11 col-md-11 col-sm-11 col-11 escribir">
         <div class="input-group mb-3">
-          <input type="text" class="form-control" placeholder="Escribe algo..." aria-label="Recipient's username" aria-describedby="basic-addon2">
+          <input type="text" class="form-control" placeholder="Escribe algo..." [(ngModel)]="message"
+                 (keyup)="$event.keyCode == 13 && sendMessage()">
           <div class="input-group-append">
-            <button class="btn btn-outline-secondary" type="button">Enviar</button>
+            <button class="btn btn-outline-secondary" (click)="sendMessage()" type="button">Enviar</button>
           </div>
         </div>
       </div>
@@ -33,13 +35,6 @@
   </div>
 </div>
 
-
-
-
-
-<!--<div *ngFor="let message of messages">-->
-  <!--{{message}}-->
-<!--</div>-->
 
 <!--<input [(ngModel)]="message" (keyup)="$event.keyCode == 13 && sendMessage()" />-->
 <!--<button (click)="sendMessage()">Send</button>-->
