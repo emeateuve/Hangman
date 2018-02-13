@@ -1,4 +1,5 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, OnInit} from '@angular/core';
+import {ChatService} from "../chat.service";
 
 @Component({
   selector: 'app-lobby',
@@ -7,9 +8,18 @@ import { Component, OnInit } from '@angular/core';
 })
 export class LobbyComponent implements OnInit {
 
-  constructor() { }
+  constructor(private servicioChat: ChatService) {
+  }
 
   ngOnInit() {
+    this.servicioChat.consoleLogUsuario().subscribe((data) => {
+      console.log("Data del subscribe", data)
+    })
+  }
+
+  darUsuario() {
+    console.log('Se ha conectado: ');
+    console.log(this.servicioChat.consoleLogUsuario())
   }
 
 }

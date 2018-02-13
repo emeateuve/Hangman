@@ -10,3 +10,11 @@
 .centro{
   display: inline-block;
 }
+
+.centro button a{
+  color: #fff;
+}
+
+.centro button{
+  background-color: #193740;
+}

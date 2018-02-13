@@ -4,10 +4,10 @@
     <div class="col-lg-10 col-md-10 col-sm-10 col-10 centro">
       <form>
         <div class="form-group">
-          <label for="formGroupExampleInput">Nombre de usuario: </label>
-          <input type="text" class="form-control" id="formGroupExampleInput" placeholder="Usuario...">
+          <label>Nombre de usuario: </label>
+          <input type="text" name="nombreUsuario" [(ngModel)]="inputUsuario" class="form-control" placeholder="Usuario...">
         </div>
-        <button type="button" class="btn btn-primary"><a [routerLink]="['lobby']">Sign in</a></button>
+        <button *ngIf="inputUsuario" type="button" class="btn btn-primary"><a (click)="enviarUsuario()" [routerLink]="['lobby']">Log in</a></button>
       </form>
     </div>
     <p>Recuerda que tu nombre de usuario debe ser único</p>

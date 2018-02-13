@@ -9,6 +9,8 @@ let io = socketIO(server);
 
 const port = process.env.PORT || 3000;
 
+var arrayUsuarios = [];
+
 io.on('connection', (socket) => {
   console.log('user connected');
 
@@ -16,6 +18,17 @@ io.on('connection', (socket) => {
     console.log(message);
     io.emit(message);
   });
+
+  socket.on('confirmarUsuario', (usuario) => {
+    existeUsuario = arrayUsuarios.indexOf(usuario.toLowerCase());
+    if (existeUsuario >= 0) {
+      console.log('El usuario existe');
+    } else {
+      console.log('El usuario no existe. Registro con éxito.');
+      arrayUsuarios.push(usuario.toLowerCase());
+      socket.emit('consoleusuario', usuario);
+    }
+  })
 });
 
 server.listen(port, () => {

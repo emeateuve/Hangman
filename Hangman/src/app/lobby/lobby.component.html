@@ -12,7 +12,9 @@
         </div>
         <div id="collapseOne" class="collapse" aria-labelledby="headingOne" data-parent="#accordion">
           <div class="card-body">
-            Aski es donde busca uste partida
+            <label for="validationServer01">Sala</label>
+            <input type="text" name="numeroSala" [(ngModel)]="numeroSala" class="form-control" id="validationServer01" placeholder="Número de sala..." value="0" required>
+            <button *ngIf="numeroSala" class="btn btn-primary buscar" type="submit" [routerLink]="['/partida/'+numeroSala]">Buscar partida</button>
           </div>
         </div>
       </div>
@@ -51,4 +53,5 @@
       </div>
     </div>
   </div>
+  <button (click)="darUsuario()">DAME EL USUARIO</button>
 </div>

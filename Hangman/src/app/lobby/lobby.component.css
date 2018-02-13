@@ -23,6 +23,7 @@
 
 .card-header h5 {
   text-align: center;
+  margin: auto;
 }
 
 #accordion {
@@ -30,4 +31,10 @@
   height: inherit;
   width: inherit;
   display: inline-block;
+}
+
+.buscar {
+  background-color: #193740;
+  margin: auto;
+  width: 100%;
 }
