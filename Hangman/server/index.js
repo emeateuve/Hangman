@@ -26,8 +26,17 @@ io.on('connection', (socket) => {
     } else {
       console.log('El usuario no existe. Registro con éxito.');
       arrayUsuarios.push(usuario.toLowerCase());
-      socket.emit('consoleusuario', usuario);
+      socket.nombre_usuario = usuario.toLowerCase();
+      socket.emit('consoleusuario', {usuario: usuario, array: arrayUsuarios});
     }
+  })
+  socket.on('disconnect', function () {
+    let pos = arrayUsuarios.indexOf(socket.nombre_usuario);
+    arrayUsuarios.splice(pos, 1)
+    io.emit('desconexion', {
+      msg: 'Se ha desconectado: ' + socket.nombre_usuario,
+      array: arrayUsuarios
+    })
   })
 });
 

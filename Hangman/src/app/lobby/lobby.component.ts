@@ -11,15 +11,18 @@ export class LobbyComponent implements OnInit {
   constructor(private servicioChat: ChatService) {
   }
 
+  private usuario: any;
+
+
   ngOnInit() {
     this.servicioChat.consoleLogUsuario().subscribe((data) => {
-      console.log("Data del subscribe", data)
+      this.usuario = data.usuario
     })
   }
 
   darUsuario() {
-    console.log('Se ha conectado: ');
-    console.log(this.servicioChat.consoleLogUsuario())
+    console.log(this.usuario);
+    alert('Bienvenido ' + this.usuario);
   }
 
 }

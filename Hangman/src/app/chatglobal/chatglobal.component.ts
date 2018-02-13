@@ -10,21 +10,27 @@ export class ChatglobalComponent implements OnInit {
   message: string;
   messages: string[] = [];
 
+
   constructor(private chatService: ChatService) {
 
   }
 
   ngOnInit() {
-    this.chatService
-      .getMessages()
-      .subscribe((message: string) => {
+    this.chatService.getMessages().subscribe((message: string) => {
       this.messages.push(message);
-      })
+      });
+
+    this.chatService.usuarioDesconectado().subscribe((data) =>{
+      this.messages.push(data.msg)
+    });
   }
 
   sendMessage() {
     this.chatService.sendMessage(this.message);
     this.message = '';
   }
+
+
+
 
 }

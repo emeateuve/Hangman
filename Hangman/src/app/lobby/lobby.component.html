@@ -1,5 +1,5 @@
 <div class="container">
-  <div class="col-lg-6 col-md-6 col-sm-6 col-6 menu">
+  <div *ngIf="usuario" class="col-lg-6 col-md-6 col-sm-6 col-6 menu">
     <div id="accordion">
       <div class="card">
         <div class="card-header" id="headingOne">
@@ -52,6 +52,12 @@
         </div>
       </div>
     </div>
+    <h3 style="text-align: center">{{usuario}}</h3>
+    <button (click)="darUsuario()">DAME EL USUARIO</button>
   </div>
-  <button (click)="darUsuario()">DAME EL USUARIO</button>
+  <div *ngIf="!usuario">
+    <h1>No tienes usuario compare, ponte uno</h1>
+    <button routerLink="/">Volver al inicio</button>
+  </div>
+
 </div>
