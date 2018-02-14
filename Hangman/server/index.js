@@ -7,6 +7,7 @@ let server = http.Server(app);
 let socketIO = require('socket.io');
 let io = socketIO(server);
 
+
 const port = process.env.PORT || 3000;
 
 var arrayUsuarios = [];
@@ -31,6 +32,10 @@ io.on('connection', (socket) => {
       io.emit('usuarioConectado', arrayUsuarios);
       console.log(arrayUsuarios)
     }
+    socket.on('enviar-room', (sala) => {
+      socket.join(sala);
+      console.log('se ha añadido a la sala', sala);
+    })
   })
 
 
@@ -41,6 +46,8 @@ io.on('connection', (socket) => {
       msg: 'Se ha desconectado: ' + socket.nombre_usuario,
       array: arrayUsuarios
     })
+      // socket.leave(sala);
+      // console.log('se ha desconectado de la sala', sala);
   })
 });
 

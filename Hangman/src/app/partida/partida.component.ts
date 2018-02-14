@@ -1,5 +1,5 @@
 import {Component, OnInit} from '@angular/core';
-import {isBoolean} from "util";
+import {ChatService} from "../chat.service";
 
 @Component({
   selector: 'app-partida',
@@ -27,6 +27,7 @@ export class PartidaComponent implements OnInit {
   }
 
   ngOnInit() {
+
     this.haypalabra = false;
 
   }
@@ -46,6 +47,10 @@ export class PartidaComponent implements OnInit {
       alert('Enhorabuena compadre, has acertado ' + this.resultado)
       this.haypalabra = false;
     }
+
+    if(this.puntuacion == 0){
+      alert('Loqui has perdido.')
+    }
   }
 
   descomponer(palabra: string) {
@@ -56,6 +61,7 @@ export class PartidaComponent implements OnInit {
   }
 
   palabraRecibida() {
+    this.puntuacion = 10;
     this.descomponer(this.textoInput.toLowerCase());
     this.haypalabra = true
   }

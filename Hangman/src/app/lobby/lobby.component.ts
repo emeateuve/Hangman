@@ -12,6 +12,7 @@ export class LobbyComponent implements OnInit {
   }
 
   private usuario: any;
+  private numeroSala: string;
 
 
   ngOnInit() {
@@ -23,6 +24,14 @@ export class LobbyComponent implements OnInit {
   darUsuario() {
     console.log(this.usuario);
     alert('Bienvenido ' + this.usuario);
+  }
+
+  enviarRoom(){
+    if(this.numeroSala){
+      console.log('enviarRoom lobby ts',this.numeroSala)
+      this.servicioChat.sendRoom(this.numeroSala);
+
+    }
   }
 
 }

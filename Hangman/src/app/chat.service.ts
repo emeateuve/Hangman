@@ -59,4 +59,9 @@ export class ChatService {
     })
   }
 
+  public sendRoom(numerosala){
+    console.log('sendRoom chat ts', numerosala)
+    this.socket.emit('enviar-room', numerosala);
+  }
+
 }
