@@ -5,12 +5,17 @@
 
 .abecedario ul li{
   text-decoration: none;
-  display: inline-block;
-  margin-left:2px;
-  font-size: 24em;
+  display: inline;
+  text-align: center;
+  font-size: 20em;
 }
 
 .abecedario ul{
   display: inline-block;
+  text-align: center;
   width:100%;
+}
+
+.puntuacion{
+  color: #fff;
 }

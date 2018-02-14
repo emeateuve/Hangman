@@ -1,4 +1,5 @@
 import {Component, OnInit} from '@angular/core';
+import {isBoolean} from "util";
 
 @Component({
   selector: 'app-partida',
@@ -11,35 +12,52 @@ export class PartidaComponent implements OnInit {
     'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's',
     't', 'u', 'v', 'w', 'x', 'y', 'z'];
 
+  /*
+  JSO: {'letraobj': X, 'estado': false}
+   */
   private palabra = [];
   private textoInput = '';
-  private existe = false;
+  private incognita = '_';
+  private resultado = [];
+  private haypalabra = false;
+  private puntuacion = 10;
 
   constructor() {
+
   }
 
   ngOnInit() {
+    this.haypalabra = false;
+
   }
 
-  adivinaLetra(letra){
-    this.existe = false;
-    for(let i = 0; i < this.palabra.length; i++){
-      if(letra == this.palabra[i]){
-        this.existe = true;
-        console.log(letra);
+  adivinaLetra(letra) {
+    let i = 0;
+    for (i; i < this.palabra.length; i++) {
+      if (letra == this.palabra[i].letra) {
+        this.resultado.push(this.palabra[i].letra)
+        this.palabra[i].estado = true;
+        console.log(this.resultado)
       }
+    }
+    this.puntuacion--
+
+    if (this.resultado.length == this.palabra.length) {
+      alert('Enhorabuena compadre, has acertado ' + this.resultado)
+      this.haypalabra = false;
     }
   }
 
   descomponer(palabra: string) {
     this.palabra = [];
     for (let i = 0; i < palabra.length; i++) {
-      this.palabra.push(palabra[i]);
+      this.palabra.push({letra: palabra[i], estado: false});
     }
   }
 
   palabraRecibida() {
-    this.descomponer(this.textoInput);
+    this.descomponer(this.textoInput.toLowerCase());
+    this.haypalabra = true
   }
 
 }
