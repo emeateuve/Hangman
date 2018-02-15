@@ -21,14 +21,18 @@ export class PartidaComponent implements OnInit {
   private resultado = [];
   private haypalabra = false;
   private puntuacion = 10;
+  private turno = true
 
-  constructor() {
+  constructor(private chatService: ChatService) {
 
   }
 
   ngOnInit() {
-
     this.haypalabra = false;
+
+    this.chatService.recibeLetraCorrecta().subscribe((data) => {
+      this.palabra = data;
+    })
 
   }
 
@@ -38,7 +42,9 @@ export class PartidaComponent implements OnInit {
       if (letra == this.palabra[i].letra) {
         this.resultado.push(this.palabra[i].letra)
         this.palabra[i].estado = true;
+        this.chatService.letraCorrecta(this.palabra)
         console.log(this.resultado)
+
       }
     }
     this.puntuacion--
@@ -48,7 +54,7 @@ export class PartidaComponent implements OnInit {
       this.haypalabra = false;
     }
 
-    if(this.puntuacion == 0){
+    if (this.puntuacion == 0) {
       alert('Loqui has perdido.')
     }
   }
@@ -58,6 +64,7 @@ export class PartidaComponent implements OnInit {
     for (let i = 0; i < palabra.length; i++) {
       this.palabra.push({letra: palabra[i], estado: false});
     }
+    this.chatService.enviar_palabra(this.palabra)
   }
 
   palabraRecibida() {

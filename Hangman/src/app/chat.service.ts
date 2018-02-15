@@ -51,17 +51,37 @@ export class ChatService {
 
   public usuarioConectado = () => {
     return Observable.create((observer) => {
-      this.socket.on('usuarioConectado', function (data){
+      this.socket.on('usuarioConectado', function (data) {
         observer.next(data);
         this.arrayUsuarios = data;
-        console.log('nueva conexión: ',this.arrayUsuarios)
+        console.log('nueva conexión: ', this.arrayUsuarios)
       })
     })
   }
 
-  public sendRoom(numerosala){
+  public sendRoom(numerosala) {
     console.log('sendRoom chat ts', numerosala)
     this.socket.emit('enviar-room', numerosala);
   }
+
+  public enviar_palabra(array_palabra) {
+    this.socket.emit('palabraNueva', array_palabra)
+  }
+
+  public letraCorrecta(palabra){
+    this.socket.emit('letraAcertada', palabra)
+  }
+
+  public recibeLetraCorrecta = () => {
+    return Observable.create((observer) => {
+      this.socket.on('letraAcertadaDevuelta', function (data) {
+        observer.next(data);
+        this.palabra = data;
+        console.log('Correcto', data)
+      })
+    })
+  }
+
+
 
 }

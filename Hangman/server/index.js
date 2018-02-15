@@ -7,6 +7,8 @@ let server = http.Server(app);
 let socketIO = require('socket.io');
 let io = socketIO(server);
 
+var arrayPalabras = []
+
 
 const port = process.env.PORT || 3000;
 
@@ -35,6 +37,13 @@ io.on('connection', (socket) => {
     socket.on('enviar-room', (sala) => {
       socket.join(sala);
       console.log('se ha añadido a la sala', sala);
+    })
+    socket.on('palabraNueva',function (data) {
+      io.emit('enviarPalabra', data);
+      console.log('esta es la palabra desde el servidor', data);
+    })
+    socket.on('letraAcertada', function (data) {
+      io.emit('letraAcertadaDevuelta', data);
     })
   })
 
