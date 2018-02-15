@@ -50,7 +50,8 @@ io.on('connection', (socket) => {
         io.emit('usuarioConectado', {
           usuario: usuario,
           array: arrayUsuarios,
-          msg: 'Se ha conectado ' + socket.nombre_usuario
+          msg: 'Se ha conectado ' + socket.nombre_usuario,
+          turno: false
         });
 
         socket.on('palabraNueva', function (data) {
@@ -62,10 +63,9 @@ io.on('connection', (socket) => {
         });
       });
 
-      // socket.on('enviar-room', (sala) => {
-      //   socket.join(sala);
-      //   console.log('se ha añadido a la sala', sala);
-      // });
+      // socket.on('cambiameElTurno', data{
+      //   // io.emit('turnoCambiado', data)
+      // })
 
     }
   })

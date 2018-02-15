@@ -1,15 +1,20 @@
 <div class="container-fluid">
   <div *ngIf="partida" class="row">
-    <button *ngIf="!haypalabra" type="button" (click)="palabraRecibida()">DAME UNA PALABRA YA</button>
-    <div *ngIf="haypalabra" class="col-lg-12 col-xl-12 col-md-12 col-sm-12 col-12 abecedario">
+    <button type="button" (click)="cambiaTurno()">Cambiar turno.</button>
+    <div *ngIf="turnaso == true">
+      <h1>Es tu turno {{usuario}}</h1>
+    </div>
+    <button *ngIf="!hayfrase" type="button" (click)="palabraRecibida()">DAME UNA PALABRA YA</button>
+    <div *ngIf="hayfrase" class="col-lg-12 col-xl-12 col-md-12 col-sm-12 col-12 abecedario">
       <div class="puntuacion">
         <h3>Puntuación:</h3>
         <h2>{{puntuacion}}</h2>
       </div>
-      <ul>
-        <li *ngFor="let letraobj of palabra">
+      <ul style="background-color: white;">
+        <li *ngFor="let letraobj of frase">
           <span *ngIf="letraobj.estado">{{letraobj.letra}}</span>
           <span *ngIf="!letraobj.estado">{{incognita}}</span>
+          <span *ngIf="letraobj.letra == ' '">/</span>
         </li>
       </ul>
       <button *ngFor="let item of abecedario" type="button" (click)="adivinaLetra(item)">{{item}}</button>
@@ -19,4 +24,18 @@
     <h1 style="color: #fff;">Ea que ya has terminao, vuelve</h1>
     <button routerLink="/lobby">Llévame al inicio</button>
   </div>
+  <div class="col-6 listaUsuarios" *ngIf="partida">
+    <ul>
+      <li style="font-weight: bold; color: #fff;" *ngFor="let usuario of arrayUsuarios">{{usuario}}</li>
+    </ul>
+  </div>
+  <h1>MENSAJES</h1>
+  <div class="mensajes" *ngFor="let msg of messages">
+    <ul>
+      <li>{{msg}}</li>
+    </ul>
+  </div>
+
+
+
 </div>

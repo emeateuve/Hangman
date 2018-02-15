@@ -10,54 +10,79 @@ export class PartidaComponent implements OnInit {
 
   private abecedario = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h',
     'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's',
-    't', 'u', 'v', 'w', 'x', 'y', 'z'];
+    't', 'u', 'v', 'w', 'x', 'y', 'z', ' '];
 
-  private arrayPalabras = [
-    'Camisa', 'Camiseta', 'Pantalon', 'Zapatillas', 'Calcetines', 'Sudadera', 'Corbata', 'Jersey', 'Chaqueta', //ROPA
-    'Kebab', 'Shawarma', 'Macarrones', 'Patata', 'Lechuga', 'Tortelini', 'Pimiento', 'Pollo', 'Filete', 'Queso', //COMIDA
-    'Pantalla', 'Movil', 'Monitor', 'Raton', 'Teclado', 'Alfombrilla', 'Cable', 'Auriculares', 'Conector', //HARDWARE
-    'Guadalajara', 'Cordoba', 'Granada', 'Malaga', 'Jaen', 'Huelva', 'Sevilla', 'Almeria', 'Cadiz', 'Huesca', //PROVINCIAS
+  private arrayFrases = [
+    'Alto ahi Concha',
+    'A ver si me muero ya',
+    'Esto son hundreds no twenty'
   ];
 
   /*
   JSO: {'letraobj': X, 'estado': false}
    */
-  private palabra = [];
+  private frase = [];
+  private usuario: any;
+  public arrayUsuarios = [];
   private incognita = '_';
   private resultado = [];
-  private haypalabra = false;
+  private hayfrase = false;
   private puntuacion = 15;
   private partida = false;
   private letrasDichas = [];
+  private espacio = ' ';
+  messages: string[] = [];
+  private jsonJugador: any;
+  private numeroTurno = 0;
+  private turnaso;
 
   constructor(private chatService: ChatService) {
 
   }
 
   ngOnInit() {
-    this.haypalabra = false;
+    this.hayfrase = false;
     this.partida = true;
+    this.numeroTurno = 0;
 
     this.chatService.recibeLetraCorrecta().subscribe((data) => {
-      this.palabra = data;
+      this.frase = data;
     })
+
+    this.chatService.usuarioConectado().subscribe((data) => {
+      this.jsonJugador = data;
+      this.arrayUsuarios = data.array;
+      this.usuario = data.usuario;
+      this.messages.push(data.msg, data.turno);
+      this.turnaso = data.turno;
+
+    });
+
+    this.chatService.usuarioDesconectado().subscribe((data) => {
+      this.arrayUsuarios = data.array;
+    })
+
+    this.chatService.usuarioEnJuego();
 
   }
 
   adivinaLetra(letra) {
     let i = 0;
-    for (i; i < this.palabra.length; i++) {
-      if (letra == this.palabra[i].letra) {
-        this.resultado.push(this.palabra[i].letra)
-        this.palabra[i].estado = true;
-        this.chatService.letraCorrecta(this.palabra)
+    this.letrasDichas.push(letra);
+    for (i; i < this.frase.length; i++) {
+      if (letra == this.frase[i].letra) {
+        this.resultado.push(this.frase[i].letra)
+        this.frase[i].estado = true;
+
+        this.chatService.letraCorrecta(this.frase)
       }
-    }
+    };
+
     this.puntuacion--
 
-    if (this.resultado.length == this.palabra.length) {
+    if (this.resultado.length == this.frase.length) {
       alert('Enhorabuena compadre, has acertado. 10 punticos más pa ti y siguiente ronda.')
-      this.haypalabra = false;
+      this.hayfrase = false;
       alert('Enhorabuena. Has terminado con: ' + this.puntuacion + ' puntos.')
       this.partida = false;
 
@@ -69,23 +94,27 @@ export class PartidaComponent implements OnInit {
     }
   }
 
-  descomponer(palabra: string) {
-    this.palabra = [];
-    for (let i = 0; i < palabra.length; i++) {
-      this.palabra.push({letra: palabra[i], estado: false});
+  descomponer(frase: string) {
+    this.frase = [];
+    for (let i = 0; i < frase.length; i++) {
+      this.frase.push({letra: frase[i], estado: false});
     }
-    this.chatService.enviar_palabra(this.palabra);
-    console.log('acaba de recibir la palabra \n', this.palabra, ' desde el servidor');
-    this.haypalabra = true;
+    this.chatService.enviar_palabra(this.frase);
+    console.log('acaba de recibir la palabra \n', this.frase, ' desde el servidor');
+    this.hayfrase = true;
   }
 
   palabraRecibida() {
     this.puntuacion = this.puntuacion + 10;
-    this.descomponer(this.arrayPalabras[Math.floor(Math.random() * this.arrayPalabras.length)].toLowerCase());
+    this.descomponer(this.arrayFrases[Math.floor(Math.random() * this.arrayFrases.length)].toLowerCase());
   }
 
-  consola() {
-    console.log('Partida nueva')
+  cambiaTurno(){
+    this.chatService.cambiaTurnoSv(this.turnaso)
+    console.log('cambia Turno', this.jsonJugador);
+    // this.arrayUsuarios[this.numeroTurno].turno = false;
+    // this.numeroTurno++;
+    // this.[this.numeroTurno].turno = true;
   }
 
 }

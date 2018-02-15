@@ -54,7 +54,6 @@ export class ChatService {
       this.socket.on('usuarioConectado', function (data) {
         observer.next(data);
         this.arrayUsuarios = data.array;
-        console.log('datos de usuario conectado: ', data)
       })
     })
   }
@@ -77,6 +76,10 @@ export class ChatService {
     this.socket.emit('letraAcertada', palabra)
   }
 
+  public cambiaTurnoSv(usuario){
+    this.socket.emit('cambiameElTurno', usuario)
+  }
+
   public recibeLetraCorrecta = () => {
     return Observable.create((observer) => {
       this.socket.on('letraAcertadaDevuelta', function (data) {
@@ -86,6 +89,8 @@ export class ChatService {
       })
     })
   }
+
+
 
 
 
