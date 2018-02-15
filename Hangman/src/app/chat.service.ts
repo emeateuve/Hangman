@@ -8,6 +8,7 @@ import {observable} from "rxjs/symbol/observable";
 export class ChatService {
   private url = 'http://localhost:3000';
   private socket;
+  public usuario;
   public arrayUsuarios = [];
 
   constructor() {
@@ -15,15 +16,14 @@ export class ChatService {
   }
 
   public sendUsuario(usuario) {
+    this.usuario = usuario;
     this.socket.emit('confirmarUsuario', usuario)
   }
 
   public consoleLogUsuario = () => {
     return Observable.create((observer) => {
       this.socket.on('consoleusuario', (data) => {
-        observer.next(data)
-        this.arrayUsuarios = data.array
-
+          observer.next(data);
       })
     });
   };
@@ -53,8 +53,8 @@ export class ChatService {
     return Observable.create((observer) => {
       this.socket.on('usuarioConectado', function (data) {
         observer.next(data);
-        this.arrayUsuarios = data;
-        console.log('nueva conexión: ', this.arrayUsuarios)
+        this.arrayUsuarios = data.array;
+        console.log('datos de usuario conectado: ', data)
       })
     })
   }
@@ -62,6 +62,11 @@ export class ChatService {
   public sendRoom(numerosala) {
     console.log('sendRoom chat ts', numerosala)
     this.socket.emit('enviar-room', numerosala);
+  }
+
+  public usuarioEnJuego() {
+    console.log('vamos a conectar al usuario', this.usuario);
+    this.socket.emit('usuario-entra-jugar');
   }
 
   public enviar_palabra(array_palabra) {

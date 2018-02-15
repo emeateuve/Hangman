@@ -1,3 +1,19 @@
-<p>
-  waiting works!
-</p>
+<div class="container">
+  <div class="col-6 usuarios">
+    <h1>Usuarios:</h1><hr>
+    <ul>
+      <li *ngFor="let usuario of usuariosConectados">
+        {{usuario}}
+      </li>
+    </ul>
+  </div>
+  <div class="mensajes">
+    <h1>Mensajes: </h1><hr>
+    <ul>
+      <li *ngFor="let conexion of messages">
+        {{conexion}}
+      </li>
+    </ul>
+  </div>
+  <button>LISTO</button>
+</div>

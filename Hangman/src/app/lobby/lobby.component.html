@@ -14,7 +14,7 @@
           <div class="card-body">
             <label for="validationServer01">Sala</label>
             <input type="text" name="numeroSala" [(ngModel)]="numeroSala" class="form-control" id="validationServer01" placeholder="Número de sala..." value="0" required>
-            <button *ngIf="numeroSala" class="btn btn-primary buscar" type="submit" (click)="enviarRoom()" [routerLink]="['/partida/'+numeroSala]">Buscar partida</button>
+            <button *ngIf="numeroSala" class="btn btn-primary buscar" type="submit" [routerLink]="['/waiting']">Buscar partida</button>
           </div>
         </div>
       </div>

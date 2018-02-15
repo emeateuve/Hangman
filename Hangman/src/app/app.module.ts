@@ -18,7 +18,8 @@ const appRoutes: Routes = [
   {path: '', component: MainComponent},
   {path: 'lobby', component: LobbyComponent},
   {path: 'chatglobal', component: ChatglobalComponent},
-  {path: 'partida/:sala', component: PartidaComponent}
+  {path: 'partida/:sala', component: PartidaComponent},
+  {path: 'waiting', component: WaitingComponent}
 ];
 
 @NgModule({
