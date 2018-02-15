@@ -12,6 +12,7 @@ import {ChatglobalComponent} from './chatglobal/chatglobal.component';
 import {FooterComponent} from './footer/footer.component';
 import {ChatService} from "./chat.service";
 import {LobbyComponent} from './lobby/lobby.component';
+import { WaitingComponent } from './waiting/waiting.component';
 
 const appRoutes: Routes = [
   {path: '', component: MainComponent},
@@ -27,7 +28,8 @@ const appRoutes: Routes = [
     PartidaComponent,
     ChatglobalComponent,
     FooterComponent,
-    LobbyComponent
+    LobbyComponent,
+    WaitingComponent
   ],
   imports: [
     BrowserModule,
