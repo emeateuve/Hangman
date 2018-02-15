@@ -12,16 +12,21 @@ export class PartidaComponent implements OnInit {
     'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's',
     't', 'u', 'v', 'w', 'x', 'y', 'z'];
 
+  private arrayPalabras = [
+    'Camisa', 'Camiseta', 'Pantalon', 'Zapatillas', 'Calcetines', 'Sudadera', 'Corbata', 'Jersey', 'Chaqueta', //ROPA
+    'Kebab', 'Shawarma', 'Macarrones', 'Patata', 'Lechuga', 'Tortelini', 'Pimiento', 'Pollo', 'Filete', 'Queso', //COMIDA
+    'Pantalla', 'Movil', 'Monitor', 'Raton', 'Teclado', 'Alfombrilla', 'Cable', 'Auriculares', 'Conector', //HARDWARE
+    'Guadalajara', 'Cordoba', 'Granada', 'Malaga', 'Jaen', 'Huelva', 'Sevilla', 'Almeria', 'Cadiz', 'Huesca', //PROVINCIAS
+  ];
+
   /*
   JSO: {'letraobj': X, 'estado': false}
    */
   private palabra = [];
-  private textoInput = '';
   private incognita = '_';
   private resultado = [];
   private haypalabra = false;
-  private puntuacion = 10;
-  private turno = true
+  private puntuacion = 15;
 
   constructor(private chatService: ChatService) {
 
@@ -50,7 +55,7 @@ export class PartidaComponent implements OnInit {
     this.puntuacion--
 
     if (this.resultado.length == this.palabra.length) {
-      alert('Enhorabuena compadre, has acertado ' + this.resultado)
+      alert('Enhorabuena compadre, has acertado. 10 punticos más pa ti y siguiente ronda.')
       this.haypalabra = false;
     }
 
@@ -64,13 +69,15 @@ export class PartidaComponent implements OnInit {
     for (let i = 0; i < palabra.length; i++) {
       this.palabra.push({letra: palabra[i], estado: false});
     }
-    this.chatService.enviar_palabra(this.palabra)
+    this.chatService.enviar_palabra(this.palabra);
+    console.log('acaba de recibir la palabra ', this.palabra, ' desde el servidor');
+    this.haypalabra = true
+    console.log('Palabra es true')
   }
 
   palabraRecibida() {
-    this.puntuacion = 10;
-    this.descomponer(this.textoInput.toLowerCase());
-    this.haypalabra = true
+    this.puntuacion = this.puntuacion + 10;
+    this.descomponer(this.arrayPalabras[Math.floor(Math.random()*this.arrayPalabras.length)].toLowerCase());
   }
 
 }

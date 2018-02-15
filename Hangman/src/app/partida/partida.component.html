@@ -1,7 +1,6 @@
 <div class="container-fluid">
   <div class="row">
-    <input *ngIf="!haypalabra" type="text" [(ngModel)]="textoInput">
-    <button *ngIf="!haypalabra" type="button" (click)="palabraRecibida()">Enviar</button>
+    <button *ngIf="!haypalabra" type="button" (click)="palabraRecibida()">DAME UNA PALABRA YA</button>
     <div *ngIf="haypalabra" class="col-lg-12 col-xl-12 col-md-12 col-sm-12 col-12 abecedario">
       <div class="puntuacion">
         <h3>Puntuación:</h3>

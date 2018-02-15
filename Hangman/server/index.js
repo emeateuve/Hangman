@@ -7,7 +7,12 @@ let server = http.Server(app);
 let socketIO = require('socket.io');
 let io = socketIO(server);
 
-var arrayPalabras = []
+var arrayPalabras = [
+  'Camisa', 'Camiseta', 'Pantalon', 'Zapatillas', 'Calcetines', 'Sudadera', 'Corbata', 'Jersey', 'Chaqueta', //ROPA
+  'Kebab', 'Shawarma', 'Macarrones', 'Patata', 'Lechuga', 'Tortelini', 'Pimiento', 'Pollo', 'Filete', 'Queso', //COMIDA
+  'Pantalla', 'Movil', 'Monitor', 'Raton', 'Teclado', 'Alfombrilla', 'Cable', 'Auriculares', 'Conector', //HARDWARE
+  'Guadalajara', 'Cordoba', 'Granada', 'Malaga', 'Jaen', 'Huelva', 'Sevilla', 'Almeria', 'Cadiz', 'Huesca', //PROVINCIAS
+];
 
 
 const port = process.env.PORT || 3000;
@@ -28,7 +33,11 @@ io.on('connection', (socket) => {
       socket.nombre_usuario = usuario.toLowerCase();
 
       socket.emit('consoleusuario', {usuario: usuario, array: arrayUsuarios});
-      socket.emit('usuarioConectado', {usuario: usuario, array: arrayUsuarios, msg: 'Se ha conectado ' + socket.nombre_usuario});
+      socket.emit('usuarioConectado', {
+        usuario: usuario,
+        array: arrayUsuarios,
+        msg: 'Se ha conectado ' + socket.nombre_usuario
+      });
 
       socket.on('new-message', (message) => {
         console.log(message);
@@ -49,14 +58,14 @@ io.on('connection', (socket) => {
           console.log('esta es la palabra desde el servidor', data);
         });
         socket.on('letraAcertada', function (data) {
-          io.emit('letraAcertadaDevuelta', data);
+          socket.emit('letraAcertadaDevuelta', data);
         });
       });
 
-      socket.on('enviar-room', (sala) => {
-        socket.join(sala);
-        console.log('se ha añadido a la sala', sala);
-      });
+      // socket.on('enviar-room', (sala) => {
+      //   socket.join(sala);
+      //   console.log('se ha añadido a la sala', sala);
+      // });
 
     }
   })
