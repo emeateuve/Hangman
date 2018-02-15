@@ -27,6 +27,8 @@ export class PartidaComponent implements OnInit {
   private resultado = [];
   private haypalabra = false;
   private puntuacion = 15;
+  private partida = false;
+  private letrasDichas = [];
 
   constructor(private chatService: ChatService) {
 
@@ -34,6 +36,7 @@ export class PartidaComponent implements OnInit {
 
   ngOnInit() {
     this.haypalabra = false;
+    this.partida = true;
 
     this.chatService.recibeLetraCorrecta().subscribe((data) => {
       this.palabra = data;
@@ -48,8 +51,6 @@ export class PartidaComponent implements OnInit {
         this.resultado.push(this.palabra[i].letra)
         this.palabra[i].estado = true;
         this.chatService.letraCorrecta(this.palabra)
-        console.log(this.resultado)
-
       }
     }
     this.puntuacion--
@@ -57,6 +58,10 @@ export class PartidaComponent implements OnInit {
     if (this.resultado.length == this.palabra.length) {
       alert('Enhorabuena compadre, has acertado. 10 punticos más pa ti y siguiente ronda.')
       this.haypalabra = false;
+      alert('Enhorabuena. Has terminado con: ' + this.puntuacion + ' puntos.')
+      this.partida = false;
+
+
     }
 
     if (this.puntuacion == 0) {
@@ -70,14 +75,17 @@ export class PartidaComponent implements OnInit {
       this.palabra.push({letra: palabra[i], estado: false});
     }
     this.chatService.enviar_palabra(this.palabra);
-    console.log('acaba de recibir la palabra ', this.palabra, ' desde el servidor');
-    this.haypalabra = true
-    console.log('Palabra es true')
+    console.log('acaba de recibir la palabra \n', this.palabra, ' desde el servidor');
+    this.haypalabra = true;
   }
 
   palabraRecibida() {
     this.puntuacion = this.puntuacion + 10;
-    this.descomponer(this.arrayPalabras[Math.floor(Math.random()*this.arrayPalabras.length)].toLowerCase());
+    this.descomponer(this.arrayPalabras[Math.floor(Math.random() * this.arrayPalabras.length)].toLowerCase());
+  }
+
+  consola() {
+    console.log('Partida nueva')
   }
 
 }
