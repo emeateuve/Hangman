@@ -17,6 +17,7 @@ export class LobbyComponent implements OnInit {
 
   ngOnInit() {
     this.servicioChat.consoleLogUsuario().subscribe((data) => {
+      console.log('Console desde lobby component ', data)
       this.usuario = data.usuario
     })
   }

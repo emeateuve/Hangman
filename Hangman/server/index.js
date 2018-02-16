@@ -1,3 +1,5 @@
+// import {usuario} from "../src/app/chat.service";
+
 let express = require('express');
 let app = express();
 
@@ -7,21 +9,32 @@ let server = http.Server(app);
 let socketIO = require('socket.io');
 let io = socketIO(server);
 
-var arrayPalabras = [
-  'Camisa', 'Camiseta', 'Pantalon', 'Zapatillas', 'Calcetines', 'Sudadera', 'Corbata', 'Jersey', 'Chaqueta', //ROPA
-  'Kebab', 'Shawarma', 'Macarrones', 'Patata', 'Lechuga', 'Tortelini', 'Pimiento', 'Pollo', 'Filete', 'Queso', //COMIDA
-  'Pantalla', 'Movil', 'Monitor', 'Raton', 'Teclado', 'Alfombrilla', 'Cable', 'Auriculares', 'Conector', //HARDWARE
-  'Guadalajara', 'Cordoba', 'Granada', 'Malaga', 'Jaen', 'Huelva', 'Sevilla', 'Almeria', 'Cadiz', 'Huesca', //PROVINCIAS
+var abecedario = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h',
+  'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's',
+  't', 'u', 'v', 'w', 'x', 'y', 'z', ' '];
+
+var arrayFrases = [
+  'Alto ahi Concha',
+  'A ver si me muero ya',
+  'Esto son hundreds no twenty'
 ];
 
+var frase = []
+var resultado = [];
+var letrasDichas = [];
 
 const port = process.env.PORT || 3000;
 
 var arrayUsuarios = [];
+var jsonUsuario = {
+  usuario: 'Indefinido',
+  array: arrayUsuarios,
+  turno: false,
+  puntos: 10
+};
 
 io.on('connection', (socket) => {
   console.log('user connected');
-
 
   socket.on('confirmarUsuario', (usuario) => {
     existeUsuario = arrayUsuarios.indexOf(usuario.toLowerCase());
@@ -31,55 +44,65 @@ io.on('connection', (socket) => {
       console.log('El usuario no existe. Registro con éxito.');
       arrayUsuarios.push(usuario.toLowerCase());
       socket.nombre_usuario = usuario.toLowerCase();
+      jsonUsuario.usuario = socket.nombre_usuario;
 
-      socket.emit('consoleusuario', {usuario: usuario, array: arrayUsuarios});
-      socket.emit('usuarioConectado', {
-        usuario: usuario,
-        array: arrayUsuarios,
-        msg: 'Se ha conectado ' + socket.nombre_usuario
-      });
+      socket.emit('consoleusuario', jsonUsuario);
+      socket.emit('usuarioConectado', jsonUsuario);
+
 
       socket.on('new-message', (message) => {
         console.log(message);
-        io.emit('new-message', socket.nombre_usuario + ": " + message);
+        io.emit('new-message', socket.nombre_usuario + ': ' + message);
       });
-      console.log(arrayUsuarios)
+      console.log('ArrayUsuarios ', arrayUsuarios)
 
       socket.on('usuario-entra-jugar', function () {
 
-        io.emit('usuarioConectado', {
-          usuario: usuario,
-          array: arrayUsuarios,
-          msg: 'Se ha conectado ' + socket.nombre_usuario,
-          turno: false
-        });
+        io.emit('usuarioConectado', {objeto: jsonUsuario, msg: 'Se ha conectado el ' + socket.nombre_usuario});
 
         socket.on('palabraNueva', function (data) {
+
           io.emit('enviarPalabra', data);
+          frase = data;
           console.log('esta es la palabra desde el servidor', data);
         });
-        socket.on('letraAcertada', function (data) {
-          socket.emit('letraAcertadaDevuelta', data);
-        });
+
+        socket.on('letraNueva', function (letraNueva) {
+          letrasDichas.push(letraNueva);
+          for (let i = 0; i < frase.length; i++) {
+            if (letraNueva == frase[i].letra) {
+              frase[i].estado = true;
+              resultado.push(frase[i].letra)
+              socket.emit('letraAcertada', {letra: letraNueva, estado: true});
+            } else {
+              socket.emit('letraErronea', {letra: letraNueva, puntos: jsonUsuario.puntos--}, jsonUsuario.turno = false)
+            }
+          }
+          if (resultado.length == frase.length) {
+            io.emit('Ganador', {
+              usuario: jsonUsuario.usuario,
+              resultado: resultado
+            })
+          }
+        })
+
+        // socket.on('cambiaTurno',)
+
       });
 
       // socket.on('cambiameElTurno', data{
-      //   // io.emit('turnoCambiado', data)
+      //   io.emit('turnoCambiado', data)
       // })
 
     }
-  })
+  });
 
 
   socket.on('disconnect', function () {
     let pos = arrayUsuarios.indexOf(socket.nombre_usuario);
-    arrayUsuarios.splice(pos, 1)
+    arrayUsuarios.splice(1,pos);
     io.emit('desconexion', {
-      msg: 'Se ha desconectado: ' + socket.nombre_usuario, array: arrayUsuarios
-    });
-
-    // socket.leave(sala);
-    // console.log('se ha desconectado de la sala', sala);
+      msg: 'Se ha desconectado: ' + socket.nombre_usuario, array: arrayUsuarios});
   })
 });
 

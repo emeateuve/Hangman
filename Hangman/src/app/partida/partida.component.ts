@@ -69,15 +69,12 @@ export class PartidaComponent implements OnInit {
   adivinaLetra(letra) {
     let i = 0;
     this.letrasDichas.push(letra);
-    for (i; i < this.frase.length; i++) {
-      if (letra == this.frase[i].letra) {
-        this.resultado.push(this.frase[i].letra)
-        this.frase[i].estado = true;
+    // for (i; i < this.frase.length; i++) {
+    //   if (letra == this.frase[i].letra) {
+    //     this.resultado.push(this.frase[i].letra);
+    //     this.frase[i].estado = true;
 
-        this.chatService.letraCorrecta(this.frase)
-      }
-    };
-
+    this.chatService.enviar_letra(this.frase);
     this.puntuacion--
 
     if (this.resultado.length == this.frase.length) {
@@ -110,7 +107,7 @@ export class PartidaComponent implements OnInit {
   }
 
   cambiaTurno(){
-    this.chatService.cambiaTurnoSv(this.turnaso)
+    // this.chatService.cambiaTurnoSv(this.jsonJugador)
     console.log('cambia Turno', this.jsonJugador);
     // this.arrayUsuarios[this.numeroTurno].turno = false;
     // this.numeroTurno++;

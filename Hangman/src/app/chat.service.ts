@@ -69,12 +69,18 @@ export class ChatService {
   }
 
   public enviar_palabra(array_palabra) {
-    this.socket.emit('palabraNueva', array_palabra)
+    this.socket.emit('palabraNueva', array_palabra);
   }
 
-  public letraCorrecta(palabra){
-    this.socket.emit('letraAcertada', palabra)
+  public enviar_letra(letra){
+    this.socket.emit('letraNueva', letra);
   }
+
+  // public letraCorrecta(palabra){
+  //   this.socket.emit('letraAcertada', palabra)
+  // }
+
+
 
   public cambiaTurnoSv(usuario){
     this.socket.emit('cambiameElTurno', usuario)
@@ -85,7 +91,6 @@ export class ChatService {
       this.socket.on('letraAcertadaDevuelta', function (data) {
         observer.next(data);
         this.palabra = data;
-        console.log('Correcto', data)
       })
     })
   }
