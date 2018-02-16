@@ -26,12 +26,7 @@ var letrasDichas = [];
 const port = process.env.PORT || 3000;
 
 var arrayUsuarios = [];
-var jsonUsuario = {
-  usuario: 'Indefinido',
-  array: arrayUsuarios,
-  turno: false,
-  puntos: 10
-};
+
 
 io.on('connection', (socket) => {
   console.log('user connected');
@@ -42,23 +37,28 @@ io.on('connection', (socket) => {
       console.log('El usuario existe');
     } else {
       console.log('El usuario no existe. Registro con éxito.');
-      arrayUsuarios.push(usuario.toLowerCase());
+      socket.jsonUsuario = {
+        usuario: usuario,
+        array: arrayUsuarios,
+        turno: false,
+        puntos: 10
+      };
       socket.nombre_usuario = usuario.toLowerCase();
-      jsonUsuario.usuario = socket.nombre_usuario;
+      socket.jsonUsuario.usuario = socket.nombre_usuario;
+      arrayUsuarios.push(socket.jsonUsuario.usuario);
 
-      socket.emit('consoleusuario', jsonUsuario);
-      socket.emit('usuarioConectado', jsonUsuario);
-
+      socket.emit('consoleusuario', socket.jsonUsuario);
+      socket.emit('usuarioConectado', socket.jsonUsuario);
 
       socket.on('new-message', (message) => {
         console.log(message);
-        io.emit('new-message', socket.nombre_usuario + ': ' + message);
+        io.emit('new-message', socket.jsonUsuario.usuario + ': ' + message);
       });
-      console.log('ArrayUsuarios ', arrayUsuarios)
+      console.log('ArrayUsuarios ', arrayUsuarios);
 
       socket.on('usuario-entra-jugar', function () {
 
-        io.emit('usuarioConectado', {objeto: jsonUsuario, msg: 'Se ha conectado el ' + socket.nombre_usuario});
+        io.emit('usuarioConectado', {objeto: socket.jsonUsuario, msg: 'Se ha conectado el ' + socket.jsonUsuario.usuario});
 
         socket.on('palabraNueva', function (data) {
 
@@ -75,12 +75,12 @@ io.on('connection', (socket) => {
               resultado.push(frase[i].letra)
               socket.emit('letraAcertada', {letra: letraNueva, estado: true});
             } else {
-              socket.emit('letraErronea', {letra: letraNueva, puntos: jsonUsuario.puntos--}, jsonUsuario.turno = false)
+              socket.emit('letraErronea', {letra: letraNueva, puntos: socket.jsonUsuario.puntos--}, socket.jsonUsuario.turno = false)
             }
           }
           if (resultado.length == frase.length) {
             io.emit('Ganador', {
-              usuario: jsonUsuario.usuario,
+              usuario: socket.jsonUsuario.usuario,
               resultado: resultado
             })
           }
@@ -100,9 +100,9 @@ io.on('connection', (socket) => {
 
   socket.on('disconnect', function () {
     let pos = arrayUsuarios.indexOf(socket.nombre_usuario);
-    arrayUsuarios.splice(1,pos);
+    arrayUsuarios.splice(pos,1);
     io.emit('desconexion', {
-      msg: 'Se ha desconectado: ' + socket.nombre_usuario, array: arrayUsuarios});
+      msg: 'Se ha desconectado: ' + socket.nombre_usuario, array: arrayUsuarios})
   })
 });
 

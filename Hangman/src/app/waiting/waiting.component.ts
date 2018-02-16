@@ -18,8 +18,8 @@ export class WaitingComponent implements OnInit {
   ngOnInit() {
     this.partidaLista = false;
     this.chatService.usuarioConectado().subscribe((data) => {
-      this.usuariosConectados = data.array;
-      this.jugador = data.usuario;
+      this.usuariosConectados = data.objeto.array;
+      this.jugador = data.objeto.usuario;
       console.log(data.msg, 'data-msg')
       this.messages.push(data.msg)
     });
