@@ -57,8 +57,19 @@ io.on('connection', (socket) => {
       socket.on('conectameAlChat', function (data) {
         usuariosChat.push(data.usuario);
         socket.jsonUsuario.array = usuariosChat;
-        socket.emit('usuarioConectadoChat', socket.jsonUsuario);
+        socket.jsonUsuario.msg = 'Se ha conectado: ' + socket.jsonUsuario.usuario + ' al chat.';
+        io.emit('usuarioConectadoChat', socket.jsonUsuario);
+
+        socket.on('disconnect', function () {
+          let posChat = usuariosChat.indexOf(socket.jsonUsuario.usuario)
+          usuariosChat.splice(posChat, 1);
+          socket.jsonUsuario.array = usuariosChat;
+          socket.jsonUsuario.msg = 'Se ha desconectado ' + socket.jsonUsuario.usuario + ' del chat.'
+          io.emit('desconexionChat', socket.jsonUsuario)
+        });
       })
+
+
 
       socket.on('new-message', (message) => {
         console.log(message);
@@ -115,7 +126,6 @@ io.on('connection', (socket) => {
         ;
         socket.emit('turnoCambiado', data)
       });
-
     }
     socket.on('disconnect', function () {
       let pos = arrayUsuarios.indexOf(socket.jsonUsuario.usuario);
@@ -123,10 +133,10 @@ io.on('connection', (socket) => {
       io.emit('desconexion', {
         msg: 'Se ha desconectado: ' + socket.jsonUsuario.usuario, array: arrayUsuarios
       })
+
     })
 
   });
-
 
 });
 

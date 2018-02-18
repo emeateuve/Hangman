@@ -32,6 +32,14 @@ export class ChatService {
     });
   }
 
+  public usuarioDesconectadoChat = () => {
+    return Observable.create((observer) => {
+      this.socket.on('desconexionChat', (data) => {
+        observer.next(data);
+      })
+    })
+  }
+
   public usuarioDesconectado = () => {
     return Observable.create((observer) => {
       this.socket.on('desconexion', (data) => {
@@ -45,6 +53,7 @@ export class ChatService {
     return Observable.create((observer) => {
       this.socket.on('usuarioConectado', function (data) {
         observer.next(data);
+        console.log('estas conectado', data)
       })
     })
   }

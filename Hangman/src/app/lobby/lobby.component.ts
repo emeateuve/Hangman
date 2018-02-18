@@ -13,12 +13,13 @@ export class LobbyComponent implements OnInit {
 
   private usuario: any;
   private numeroSala: string;
-
+  private jsonLobby;
 
   ngOnInit() {
     this.servicioChat.usuarioConectado().subscribe((data) => {
       this.usuario = data.usuario
       console.log(this.usuario)
+      this.jsonLobby = data;
     })
 
     this.servicioChat.usuarioDesconectado().subscribe((data) => {
@@ -40,6 +41,10 @@ export class LobbyComponent implements OnInit {
       this.servicioChat.sendRoom(this.numeroSala);
 
     }
+  }
+
+  enviameAlChat(usuario){
+    this.servicioChat.enviarChat(usuario);
   }
 
 }
