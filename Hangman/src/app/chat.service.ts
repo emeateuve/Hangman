@@ -20,22 +20,13 @@ export class ChatService {
     this.socket.emit('confirmarUsuario', usuario)
   }
 
-  public sendMessage(message) {
-    this.socket.emit('new-message', message);
-  }
 
-  public getMessages = () => {
-    return Observable.create((observer) => {
-      this.socket.on('new-message', (message) => {
-        observer.next(message);
-      });
-    });
-  }
 
-  public usuarioDesconectadoChat = () => {
+  public usuarioConectado = () => {
     return Observable.create((observer) => {
-      this.socket.on('desconexionChat', (data) => {
+      this.socket.on('usuarioConectado', function (data) {
         observer.next(data);
+        console.log('estas conectado', data)
       })
     })
   }
@@ -49,15 +40,8 @@ export class ChatService {
     })
   }
 
-  public usuarioConectado = () => {
-    return Observable.create((observer) => {
-      this.socket.on('usuarioConectado', function (data) {
-        observer.next(data);
-        console.log('estas conectado', data)
-      })
-    })
-  }
 
+  /***************************CHAT GLOBAL****************************/
   public enviarChat(usuario) {
     this.socket.emit('conectameAlChat', usuario)
   }
@@ -70,9 +54,49 @@ export class ChatService {
     })
   }
 
-  public sendRoom(numerosala) {
+  public usuarioDesconectadoChat = () => {
+    return Observable.create((observer) => {
+      this.socket.on('desconexionChat', (data) => {
+        observer.next(data);
+      })
+    })
+  }
+
+  public sendMessage(message) {
+    this.socket.emit('new-message', message);
+  }
+
+  public getMessages = () => {
+    return Observable.create((observer) => {
+      this.socket.on('new-message', (message) => {
+        observer.next(message);
+      });
+    });
+  }
+
+  /*public sendRoom(numerosala) {
     console.log('sendRoom chat ts', numerosala)
     this.socket.emit('enviar-room', numerosala);
+  }*/
+
+/****************************JUEGO*********************************/
+  public usuarioConectadoJuego = () => {
+    return Observable.create((observer) => {
+      this.socket.on('desconexionJuego', (data) => {
+        observer.next(data);
+      })
+    })
+  }
+  public usuarioDesconectadoJuego = () => {
+    return Observable.create((observer) => {
+      this.socket.on('desconexionJuego', (data) => {
+        observer.next(data);
+      })
+    })
+  }
+
+  public enviarJuego(usuario) {
+    this.socket.emit('')
   }
 
   public usuarioEnJuego() {

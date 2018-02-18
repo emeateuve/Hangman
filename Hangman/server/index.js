@@ -28,6 +28,7 @@ const port = process.env.PORT || 3000;
 var arrayUsuarios = [];
 var usuariosChat = [];
 
+
 io.on('connection', (socket) => {
   console.log('user connected');
 
@@ -68,8 +69,6 @@ io.on('connection', (socket) => {
           io.emit('desconexionChat', socket.jsonUsuario)
         });
       })
-
-
 
       socket.on('new-message', (message) => {
         console.log(message);

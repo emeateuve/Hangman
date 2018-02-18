@@ -47,4 +47,8 @@ export class LobbyComponent implements OnInit {
     this.servicioChat.enviarChat(usuario);
   }
 
+  enviameAlJuego(usuario) {
+    this.servicioChat.enviarJuego(usuario);
+  }
+
 }
