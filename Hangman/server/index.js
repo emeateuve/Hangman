@@ -117,16 +117,17 @@ io.on('connection', (socket) => {
       });
 
     }
+    socket.on('disconnect', function () {
+      let pos = arrayUsuarios.indexOf(socket.jsonUsuario.usuario);
+      arrayUsuarios.splice(pos, 1);
+      io.emit('desconexion', {
+        msg: 'Se ha desconectado: ' + socket.jsonUsuario.usuario, array: arrayUsuarios
+      })
+    })
+
   });
 
 
-  socket.on('disconnect', function () {
-    let pos = arrayUsuarios.indexOf(socket.jsonUsuario.usuario);
-    arrayUsuarios.splice(pos, 1);
-    io.emit('desconexion', {
-      msg: 'Se ha desconectado: ' + socket.jsonUsuario.usuario, array: arrayUsuarios
-    })
-  })
 });
 
 server.listen(port, () => {
