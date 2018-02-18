@@ -16,11 +16,18 @@ export class LobbyComponent implements OnInit {
 
 
   ngOnInit() {
-    this.servicioChat.consoleLogUsuario().subscribe((data) => {
-      console.log('Console desde lobby component ', data)
+    this.servicioChat.usuarioConectado().subscribe((data) => {
       this.usuario = data.usuario
+      console.log(this.usuario)
+    })
+
+    this.servicioChat.usuarioDesconectado().subscribe((data) => {
+      this.usuario = data.usuario
+      console.log(data)
     })
   }
+
+
 
   darUsuario() {
     console.log(this.usuario);

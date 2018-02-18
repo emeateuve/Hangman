@@ -9,26 +9,27 @@ import {ChatService} from "../chat.service";
 export class ChatglobalComponent implements OnInit {
   message: string;
   messages: string[] = [];
-  array_usuarios = [];
+  usuariosChat = [];
 
   constructor(private chatService: ChatService) {
   }
 
   ngOnInit() {
-    this.chatService.usuarioConectado().subscribe((data) => {
-      console.log('data del usuarioConectado() desde chat', data)
-      this.array_usuarios = data.objeto.array;
+    this.chatService.usuarioConectadoChat().subscribe((data) => {
+      this.usuariosChat = data.array;
       this.messages.push(data.msg)
     });
     this.chatService.usuarioDesconectado().subscribe((data) => {
       console.log('data del usuarioDesconectado() desde chat', data)
       this.messages.push(data.msg);
-      this.array_usuarios = data.array
+      this.usuariosChat = data.array
       console.log('desconexion actualizada', data)
     });
     this.chatService.getMessages().subscribe((message: string) => {
       this.messages.push(message);
     });
+
+
     this.chatService.usuarioEnJuego()
   }
 

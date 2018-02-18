@@ -26,7 +26,7 @@ var letrasDichas = [];
 const port = process.env.PORT || 3000;
 
 var arrayUsuarios = [];
-
+var usuariosChat = [];
 
 io.on('connection', (socket) => {
   console.log('user connected');
@@ -39,9 +39,9 @@ io.on('connection', (socket) => {
       console.log('El usuario no existe. Registro con éxito.', usuario);
       socket.jsonUsuario = {
         usuario: usuario,
-        avatar: none,
-        msg: none,
-        array: none,
+        avatar: false,
+        msg: false,
+        array: arrayUsuarios,
         turno: false,
         puntos: 10,
         ganador: false
@@ -50,8 +50,15 @@ io.on('connection', (socket) => {
       // socket.jsonUsuario.usuario = socket.nombre_usuario;
       arrayUsuarios.push(socket.jsonUsuario.usuario);
 
-      socket.emit('consoleusuario', socket.jsonUsuario);
+      console.log('antes del emit de usuarioConectado')
+
       socket.emit('usuarioConectado', socket.jsonUsuario);
+
+      socket.on('conectameAlChat', function (data) {
+        usuariosChat.push(data.usuario);
+        socket.jsonUsuario.array = usuariosChat;
+        socket.emit('usuarioConectadoChat', socket.jsonUsuario);
+      })
 
       socket.on('new-message', (message) => {
         console.log(message);

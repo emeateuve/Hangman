@@ -20,14 +20,6 @@ export class ChatService {
     this.socket.emit('confirmarUsuario', usuario)
   }
 
-  public consoleLogUsuario = () => {
-    return Observable.create((observer) => {
-      this.socket.on('consoleusuario', (data) => {
-          observer.next(data);
-      })
-    });
-  };
-
   public sendMessage(message) {
     this.socket.emit('new-message', message);
   }
@@ -53,7 +45,18 @@ export class ChatService {
     return Observable.create((observer) => {
       this.socket.on('usuarioConectado', function (data) {
         observer.next(data);
-        this.arrayUsuarios = data.array;
+      })
+    })
+  }
+
+  public enviarChat(usuario) {
+    this.socket.emit('conectameAlChat', usuario)
+  }
+
+  public usuarioConectadoChat = () => {
+    return Observable.create((observer) => {
+      this.socket.on('usuarioConectadoChat', function (data) {
+        observer.next(data);
       })
     })
   }

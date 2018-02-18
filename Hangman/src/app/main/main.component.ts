@@ -18,7 +18,7 @@ export class MainComponent implements OnInit {
 
   }
 
-  enviarUsuario(texto){
+  enviarUsuario(){
     this.servicioChat.sendUsuario(this.inputUsuario);
   }
 }
