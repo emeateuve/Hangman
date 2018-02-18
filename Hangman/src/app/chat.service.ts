@@ -95,6 +95,14 @@ export class ChatService {
     })
   }
 
+  public turnoCambiado = () => {
+    return Observable.create((observer) =>{
+      this.socket.on('turnoCambiado', function (data) {
+        observer.next(data);
+      })
+    })
+  }
+
 
 
 

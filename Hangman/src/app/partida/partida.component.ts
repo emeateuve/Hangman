@@ -54,12 +54,18 @@ export class PartidaComponent implements OnInit {
       this.arrayUsuarios = data.array;
       this.usuario = data.usuario;
       this.messages.push(data.msg, data.turno);
-      this.turnaso = data.turno;
+      this.turnaso = data.objeto.turno;
+
 
     });
 
     this.chatService.usuarioDesconectado().subscribe((data) => {
       this.arrayUsuarios = data.array;
+    })
+
+    this.chatService.turnoCambiado().subscribe((data) => {
+      this.jsonJugador = data;
+      console.log('El turno es: ',this.jsonJugador.turno)
     })
 
     this.chatService.usuarioEnJuego();
@@ -107,11 +113,13 @@ export class PartidaComponent implements OnInit {
   }
 
   cambiaTurno(){
-    // this.chatService.cambiaTurnoSv(this.jsonJugador)
+    this.chatService.cambiaTurnoSv(this.jsonJugador)
     console.log('cambia Turno', this.jsonJugador);
     // this.arrayUsuarios[this.numeroTurno].turno = false;
     // this.numeroTurno++;
     // this.[this.numeroTurno].turno = true;
   }
+
+
 
 }

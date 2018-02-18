@@ -32,19 +32,22 @@ io.on('connection', (socket) => {
   console.log('user connected');
 
   socket.on('confirmarUsuario', (usuario) => {
-    existeUsuario = arrayUsuarios.indexOf(usuario.toLowerCase());
+    existeUsuario = arrayUsuarios.indexOf(usuario);
     if (existeUsuario >= 0) {
       console.log('El usuario existe');
     } else {
-      console.log('El usuario no existe. Registro con éxito.');
+      console.log('El usuario no existe. Registro con éxito.', usuario);
       socket.jsonUsuario = {
         usuario: usuario,
-        array: arrayUsuarios,
+        avatar: none,
+        msg: none,
+        array: none,
         turno: false,
-        puntos: 10
+        puntos: 10,
+        ganador: false
       };
-      socket.nombre_usuario = usuario.toLowerCase();
-      socket.jsonUsuario.usuario = socket.nombre_usuario;
+      // socket.nombre_usuario = usuario.toLowerCase();
+      // socket.jsonUsuario.usuario = socket.nombre_usuario;
       arrayUsuarios.push(socket.jsonUsuario.usuario);
 
       socket.emit('consoleusuario', socket.jsonUsuario);
@@ -58,7 +61,10 @@ io.on('connection', (socket) => {
 
       socket.on('usuario-entra-jugar', function () {
 
-        io.emit('usuarioConectado', {objeto: socket.jsonUsuario, msg: 'Se ha conectado el ' + socket.jsonUsuario.usuario});
+        io.emit('usuarioConectado', {
+          objeto: socket.jsonUsuario,
+          msg: 'Se ha conectado el ' + socket.jsonUsuario.usuario
+        });
 
         socket.on('palabraNueva', function (data) {
 
@@ -75,7 +81,10 @@ io.on('connection', (socket) => {
               resultado.push(frase[i].letra)
               socket.emit('letraAcertada', {letra: letraNueva, estado: true});
             } else {
-              socket.emit('letraErronea', {letra: letraNueva, puntos: socket.jsonUsuario.puntos--}, socket.jsonUsuario.turno = false)
+              socket.emit('letraErronea', {
+                letra: letraNueva,
+                puntos: socket.jsonUsuario.puntos--
+              }, socket.jsonUsuario.turno = false)
             }
           }
           if (resultado.length == frase.length) {
@@ -90,19 +99,26 @@ io.on('connection', (socket) => {
 
       });
 
-      // socket.on('cambiameElTurno', data{
-      //   io.emit('turnoCambiado', data)
-      // })
+      socket.on('cambiameElTurno', function (data) {
+        if (data.turno == false) {
+          data.turno = true;
+        } else {
+          data.turno = false;
+        }
+        ;
+        socket.emit('turnoCambiado', data)
+      });
 
     }
   });
 
 
   socket.on('disconnect', function () {
-    let pos = arrayUsuarios.indexOf(socket.nombre_usuario);
-    arrayUsuarios.splice(pos,1);
+    let pos = arrayUsuarios.indexOf(socket.jsonUsuario.usuario);
+    arrayUsuarios.splice(pos, 1);
     io.emit('desconexion', {
-      msg: 'Se ha desconectado: ' + socket.nombre_usuario, array: arrayUsuarios})
+      msg: 'Se ha desconectado: ' + socket.jsonUsuario.usuario, array: arrayUsuarios
+    })
   })
 });
 

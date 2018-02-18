@@ -10,6 +10,7 @@
         <h3>Puntuación:</h3>
         <h2>{{puntuacion}}</h2>
       </div>
+      <h1>Turno: {{jsonJugador.turno}}</h1>
       <ul style="background-color: white;">
         <li *ngFor="let letraobj of frase">
           <span *ngIf="letraobj.estado">{{letraobj.letra}}</span>
