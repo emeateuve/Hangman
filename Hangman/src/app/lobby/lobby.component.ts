@@ -16,6 +16,8 @@ export class LobbyComponent implements OnInit {
   private jsonLobby;
 
   ngOnInit() {
+
+
     this.servicioChat.usuarioConectado().subscribe((data) => {
       this.usuario = data.usuario
       console.log(this.usuario)
@@ -35,13 +37,13 @@ export class LobbyComponent implements OnInit {
     alert('Bienvenido ' + this.usuario);
   }
 
-  enviarRoom(){
-    if(this.numeroSala){
-      console.log('enviarRoom lobby ts',this.numeroSala)
-      this.servicioChat.sendRoom(this.numeroSala);
-
-    }
-  }
+  // // enviarRoom(){
+  // //   if(this.numeroSala){
+  // //     console.log('enviarRoom lobby ts',this.numeroSala)
+  // //     this.servicioChat.sendRoom(this.numeroSala);
+  // //
+  // //   }
+  // }
 
   enviameAlChat(usuario){
     this.servicioChat.enviarChat(usuario);

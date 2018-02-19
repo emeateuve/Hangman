@@ -68,7 +68,7 @@ export class PartidaComponent implements OnInit {
       console.log('El turno es: ',this.jsonJugador.turno)
     })
 
-    this.chatService.usuarioEnJuego();
+    // this.chatService.usuarioEnJuego();
 
   }
 

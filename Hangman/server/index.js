@@ -27,6 +27,7 @@ const port = process.env.PORT || 3000;
 
 var arrayUsuarios = [];
 var usuariosChat = [];
+var usuariosWaiting = [];
 
 
 io.on('connection', (socket) => {
@@ -54,7 +55,7 @@ io.on('connection', (socket) => {
       console.log('antes del emit de usuarioConectado')
 
       socket.emit('usuarioConectado', socket.jsonUsuario);
-
+/****************************************CHAT GLOBAL************************************************/
       socket.on('conectameAlChat', function (data) {
         usuariosChat.push(data.usuario);
         socket.jsonUsuario.array = usuariosChat;
@@ -65,7 +66,7 @@ io.on('connection', (socket) => {
           let posChat = usuariosChat.indexOf(socket.jsonUsuario.usuario)
           usuariosChat.splice(posChat, 1);
           socket.jsonUsuario.array = usuariosChat;
-          socket.jsonUsuario.msg = 'Se ha desconectado ' + socket.jsonUsuario.usuario + ' del chat.'
+          socket.jsonUsuario.msg = 'Se ha desconectado ' + socket.jsonUsuario.usuario + ' del chat.';
           io.emit('desconexionChat', socket.jsonUsuario)
         });
       })
@@ -76,12 +77,24 @@ io.on('connection', (socket) => {
       });
       console.log('ArrayUsuarios ', arrayUsuarios);
 
-      socket.on('usuario-entra-jugar', function () {
+/******************************************WAITING***************************************************/
 
-        io.emit('usuarioConectado', {
-          objeto: socket.jsonUsuario,
-          msg: 'Se ha conectado el ' + socket.jsonUsuario.usuario
+      socket.on('conectameAlWaiting', function (data) {
+        usuariosWaiting.push(data.usuario);
+        socket.jsonUsuario.array = usuariosWaiting;
+        socket.jsonUsuario.msg = 'Se ha conectado ' + socket.jsonUsuario.usuario + ' al waiting.';
+
+        io.emit('conexionWaiting', socket.jsonUsuario);
+
+        socket.on('disconnect', function () {
+          let posWaiting = usuariosWaiting.indexOf(socket.jsonUsuario.usuario)
+          usuariosWaiting.splice(posWaiting, 1);
+          socket.jsonUsuario.array = usuariosWaiting;
+          socket.jsonUsuario.msg = 'Se ha desconectado ' + socket.jsonUsuario.usuario + ' del waiting.';
+          io.emit('desconexionWaiting', socket.jsonUsuario)
         });
+
+
 
         socket.on('palabraNueva', function (data) {
 
@@ -89,6 +102,10 @@ io.on('connection', (socket) => {
           frase = data;
           console.log('esta es la palabra desde el servidor', data);
         });
+
+
+
+
 
         socket.on('letraNueva', function (letraNueva) {
           letrasDichas.push(letraNueva);
@@ -111,20 +128,19 @@ io.on('connection', (socket) => {
             })
           }
         })
-
-        // socket.on('cambiaTurno',)
+        socket.on('cambiameElTurno', function (data) {
+          if (data.turno == false) {
+            data.turno = true;
+          } else {
+            data.turno = false;
+          }
+          ;
+          socket.emit('turnoCambiado', data)
+        });
 
       });
 
-      socket.on('cambiameElTurno', function (data) {
-        if (data.turno == false) {
-          data.turno = true;
-        } else {
-          data.turno = false;
-        }
-        ;
-        socket.emit('turnoCambiado', data)
-      });
+
     }
     socket.on('disconnect', function () {
       let pos = arrayUsuarios.indexOf(socket.jsonUsuario.usuario);

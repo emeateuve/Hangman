@@ -20,8 +20,6 @@ export class ChatService {
     this.socket.emit('confirmarUsuario', usuario)
   }
 
-
-
   public usuarioConectado = () => {
     return Observable.create((observer) => {
       this.socket.on('usuarioConectado', function (data) {
@@ -79,36 +77,37 @@ export class ChatService {
     this.socket.emit('enviar-room', numerosala);
   }*/
 
-/****************************JUEGO*********************************/
-  public usuarioConectadoJuego = () => {
-    return Observable.create((observer) => {
-      this.socket.on('desconexionJuego', (data) => {
-        observer.next(data);
-      })
-    })
-  }
-  public usuarioDesconectadoJuego = () => {
-    return Observable.create((observer) => {
-      this.socket.on('desconexionJuego', (data) => {
-        observer.next(data);
-      })
-    })
-  }
-
+  /****************************JUEGO*********************************/
   public enviarJuego(usuario) {
-    this.socket.emit('')
+    this.socket.emit('conectameAlWaiting', usuario)
   }
 
-  public usuarioEnJuego() {
-    console.log('vamos a conectar al usuario', this.usuario);
-    this.socket.emit('usuario-entra-jugar');
+  public usuarioConectadoWaiting = () => {
+    return Observable.create((observer) => {
+      this.socket.on('conexionWaiting', (data) => {
+        observer.next(data);
+      })
+    })
   }
+  public usuarioDesconectadoWaiting = () => {
+    return Observable.create((observer) => {
+      this.socket.on('desconexionWaiting', (data) => {
+        observer.next(data);
+      })
+    })
+  }
+
+
+  // public usuarioEnJuego() {
+  //   console.log('vamos a conectar al usuario', this.usuario);
+  //   this.socket.emit('usuario-entra-jugar');
+  // }
 
   public enviar_palabra(array_palabra) {
     this.socket.emit('palabraNueva', array_palabra);
   }
 
-  public enviar_letra(letra){
+  public enviar_letra(letra) {
     this.socket.emit('letraNueva', letra);
   }
 
@@ -117,8 +116,7 @@ export class ChatService {
   // }
 
 
-
-  public cambiaTurnoSv(usuario){
+  public cambiaTurnoSv(usuario) {
     this.socket.emit('cambiameElTurno', usuario)
   }
 
@@ -132,15 +130,12 @@ export class ChatService {
   }
 
   public turnoCambiado = () => {
-    return Observable.create((observer) =>{
+    return Observable.create((observer) => {
       this.socket.on('turnoCambiado', function (data) {
         observer.next(data);
       })
     })
   }
-
-
-
 
 
 }
