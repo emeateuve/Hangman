@@ -14,12 +14,15 @@ var abecedario = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h',
   't', 'u', 'v', 'w', 'x', 'y', 'z', ' '];
 
 var arrayFrases = [
-  'Alto ahi Concha',
-  'A ver si me muero ya',
-  'Esto son hundreds no twenty'
+  {frase: 'A ver si me muero ya', pista: 'Lo que digo todos los días.'},
+  {frase: 'Hay que explorar lo inexplorado', pista: 'Frase de UP'},
+  {frase: 'A quien madruga Dios le ayuda', pista: 'Al levantarse'},
+  {frase: 'Dos no se pelean si uno no quiere', pista: 'Paz y amor'},
+  {frase: 'Soy edicion limitada', pista: 'Buena autoestima'},
+  {frase: 'Ellas se lo gastan en ropa y ellos en tetas', pista: 'Presupuesto'}
 ];
 
-var frase = []
+var frase = [];
 var resultado = [];
 var letrasDichas = [];
 
@@ -58,7 +61,7 @@ io.on('connection', (socket) => {
       console.log('antes del emit de usuarioConectado')
 
       socket.emit('usuarioConectado', socket.jsonUsuario);
-/****************************************CHAT GLOBAL************************************************/
+      /****************************************CHAT GLOBAL************************************************/
       socket.on('conectameAlChat', function (data) {
         usuariosChat.push(data.usuario);
         socket.jsonUsuario.array = usuariosChat;
@@ -80,7 +83,7 @@ io.on('connection', (socket) => {
       });
       console.log('ArrayUsuarios ', arrayUsuarios);
 
-/******************************************WAITING***************************************************/
+      /******************************************WAITING***************************************************/
 
       socket.on('conectameAlWaiting', function (data) {
         usuariosWaiting.push(data.usuario);
@@ -101,29 +104,28 @@ io.on('connection', (socket) => {
         });
 
         socket.on('usuarioEstaListo', function (data) {
-          if(socket.jsonUsuario.listo == false){
+          if (socket.jsonUsuario.listo == false) {
             numeroListos++;
           }
           socket.jsonUsuario.listo = true;
           usuariosListos.push(socket.jsonUsuario);
 
-          if(numeroListos == usuariosWaiting.length){
+          if (numeroListos == usuariosWaiting.length) {
             console.log('Se puede empezar la partida')
-            io.emit('empiezaPartida')
+            io.emit('empiezaPartida', arrayFrases[Math.floor(Math.random()*arrayFrases.length)]);
           };
+        });
 
+        socket.on('nuevaPartida', function () {
+          console.log('Se empieza aquí');
+          console.log(arrayFrases.length, ' frases en total')
         })
 
-
         socket.on('palabraNueva', function (data) {
-
           io.emit('enviarPalabra', data);
           frase = data;
           console.log('esta es la palabra desde el servidor', data);
         });
-
-
-
 
 
         socket.on('letraNueva', function (letraNueva) {
