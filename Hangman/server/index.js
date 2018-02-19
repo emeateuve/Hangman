@@ -28,6 +28,8 @@ const port = process.env.PORT || 3000;
 var arrayUsuarios = [];
 var usuariosChat = [];
 var usuariosWaiting = [];
+var usuariosListos = [];
+var numeroListos = 0;
 
 
 io.on('connection', (socket) => {
@@ -45,6 +47,7 @@ io.on('connection', (socket) => {
         msg: false,
         array: arrayUsuarios,
         turno: false,
+        listo: false,
         puntos: 10,
         ganador: false
       };
@@ -89,11 +92,27 @@ io.on('connection', (socket) => {
         socket.on('disconnect', function () {
           let posWaiting = usuariosWaiting.indexOf(socket.jsonUsuario.usuario)
           usuariosWaiting.splice(posWaiting, 1);
+          let posListos = usuariosListos.indexOf(socket.jsonUsuario);
+          usuariosListos.splice(posListos, 1);
+          socket.jsonUsuario.listo = false;
           socket.jsonUsuario.array = usuariosWaiting;
           socket.jsonUsuario.msg = 'Se ha desconectado ' + socket.jsonUsuario.usuario + ' del waiting.';
           io.emit('desconexionWaiting', socket.jsonUsuario)
         });
 
+        socket.on('usuarioEstaListo', function (data) {
+          if(socket.jsonUsuario.listo == false){
+            numeroListos++;
+          }
+          socket.jsonUsuario.listo = true;
+          usuariosListos.push(socket.jsonUsuario);
+
+          if(numeroListos == usuariosWaiting.length){
+            console.log('Se puede empezar la partida')
+            // io.emit('empiezaPartida')
+          };
+
+        })
 
 
         socket.on('palabraNueva', function (data) {

@@ -97,6 +97,10 @@ export class ChatService {
     })
   }
 
+  public usuarioListo(usuario) {
+    this.socket.emit('usuarioEstaListo', usuario)
+  }
+
 
   // public usuarioEnJuego() {
   //   console.log('vamos a conectar al usuario', this.usuario);

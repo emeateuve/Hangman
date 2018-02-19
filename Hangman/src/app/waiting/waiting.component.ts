@@ -14,6 +14,7 @@ export class WaitingComponent implements OnInit {
   messages: string[] = [];
   jugador: any;
   public partidaLista;
+  private jsonJugador;
 
   ngOnInit() {
     this.partidaLista = false;
@@ -21,6 +22,7 @@ export class WaitingComponent implements OnInit {
       this.usuariosConectados = data.array;
       this.jugador = data.usuario;
       this.messages.push(data.msg)
+      this.jsonJugador = data
     });
     this.chatService.usuarioDesconectadoWaiting().subscribe((data) => {
       this.messages.push(data.msg);
@@ -44,6 +46,10 @@ export class WaitingComponent implements OnInit {
       console.log('Se puede empezar la partida');
       this.partidaLista = true;
     }
+  }
+
+  estoyListo(usuario){
+    this.chatService.usuarioListo(usuario);
   }
 
 }

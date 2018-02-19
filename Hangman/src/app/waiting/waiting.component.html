@@ -15,7 +15,7 @@
       </li>
     </ul>
   </div>
-  <button (click)="empezarPartida()">LISTO</button>
+  <button (click)="estoyListo(jsonJugador)">LISTO</button>
   <h2 style="color: #fff;">Esperando a que los jugadores entren...</h2>
   <button *ngIf="partidaLista" routerLink="/partida">Empezar partida</button>
 
