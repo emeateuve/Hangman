@@ -109,7 +109,7 @@ io.on('connection', (socket) => {
 
           if(numeroListos == usuariosWaiting.length){
             console.log('Se puede empezar la partida')
-            // io.emit('empiezaPartida')
+            io.emit('empiezaPartida')
           };
 
         })

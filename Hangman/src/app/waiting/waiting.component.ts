@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import {ChatService} from "../chat.service";
+import {ActivatedRoute, Router, RouterModule} from '@angular/router';
 
 @Component({
   selector: 'app-waiting',
@@ -8,7 +9,7 @@ import {ChatService} from "../chat.service";
 })
 export class WaitingComponent implements OnInit {
 
-  constructor(private chatService: ChatService) { }
+  constructor(private chatService: ChatService, private route: ActivatedRoute, private router: Router) { }
 
   public usuariosConectados = [];
   messages: string[] = [];
@@ -31,6 +32,10 @@ export class WaitingComponent implements OnInit {
 
     this.chatService.getMessages().subscribe((message: string) => {
       this.messages.push(message);
+    });
+
+    this.chatService.empezarPartida().subscribe((data) =>{
+      this.router.navigate(['partida']);
     });
 
     // this.chatService.usuarioEnJuego();

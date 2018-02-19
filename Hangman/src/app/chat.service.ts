@@ -133,6 +133,14 @@ export class ChatService {
     })
   }
 
+  public empezarPartida = () => {
+    return Observable.create((observer) => {
+      this.socket.on('empiezaPartida', function (data) {
+        observer.next(data);
+      })
+    })
+  }
+
   public turnoCambiado = () => {
     return Observable.create((observer) => {
       this.socket.on('turnoCambiado', function (data) {
