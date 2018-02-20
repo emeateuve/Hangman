@@ -16,20 +16,14 @@ export class PartidaComponent implements OnInit {
   private splitteada;
   private enviada;
   private abecedario;
+  private usuariosPartida = [];
 
   private usuario: any;
-  public arrayUsuarios = [];
-  private incognita = '_';
-  private resultado = [];
-  private hayfrase = false;
+
   private puntuacion = 15;
   private partida = false;
-  private letrasDichas = [];
-  private espacio = ' ';
   messages: string[] = [];
-  private jsonJugador: any;
-  private numeroTurno = 0;
-  private turnaso;
+
 
 
   constructor(private chatService: ChatService) {
@@ -37,9 +31,8 @@ export class PartidaComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.hayfrase = false;
     this.partida = true;
-    this.numeroTurno = 0;
+
 
     // this.chatService.nuevaPartida();
     // this.chatService.recibeLetraCorrecta().subscribe((data) => {
@@ -50,35 +43,24 @@ export class PartidaComponent implements OnInit {
 
     this.chatService.empiezaPartida().subscribe((data) => {
       console.log('data', data)
-      console.log('HOLI')
+
+      this.usuario = data.usuario;
+      this.usuariosPartida = data.jugadoresEnPartida;
       this.nuevaFrase = data.fraseCompleta;
       this.nuevaPista = data.pista;
       this.splitteada = data.splitteada;
       this.enviada = data.enviada;
       this.abecedario = data.botones;
-      console.log('Frase y pista', this.nuevaFrase, this.nuevaPista, this.splitteada)
+
 
     })
-
-    this.chatService.usuarioConectado().subscribe((data) => {
-      this.jsonJugador = data;
-      this.arrayUsuarios = data.array;
-      this.usuario = data.usuario;
-      this.messages.push(data.msg, data.turno);
-      this.turnaso = data.objeto.turno;
-    });
-
-    this.chatService.usuarioDesconectado().subscribe((data) => {
-      this.arrayUsuarios = data.array;
-    })
-
     this.chatService.turnoCambiado().subscribe((data) => {
-      this.jsonJugador = data;
-      console.log('El turno es: ',this.jsonJugador.turno)
+      this.usuario = data;
+      console.log('El turno es: ',this.usuario.turno)
     })
 
     this.chatService.recibeLetraCorrecta().subscribe((data) => {
-      console.log('letra correcta supolla')
+      this.enviada = data;
     })
   }
 
@@ -127,13 +109,9 @@ export class PartidaComponent implements OnInit {
   // }
 
 
-  // cambiaTurno(){
-  //   this.chatService.cambiaTurnoSv(this.jsonJugador)
-  //   console.log('cambia Turno', this.jsonJugador);
-  //   // this.arrayUsuarios[this.numeroTurno].turno = false;
-  //   // this.numeroTurno++;
-  //   // this.[this.numeroTurno].turno = true;
-  // }
+  cambiaTurno(usuario){
+    this.chatService.cambiaTurnoSv(usuario)
+  }
 
 
 

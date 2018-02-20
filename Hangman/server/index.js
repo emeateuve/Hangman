@@ -28,7 +28,7 @@ var fraseSplit = [];
 var fraseAEnviar = [];
 var resultado = [];
 var letrasDichas = [];
-
+var usuariosPartida = [];
 const port = process.env.PORT || 3000;
 
 var arrayUsuarios = [];
@@ -124,18 +124,26 @@ io.on('connection', (socket) => {
         socket.on('nuevaPartida', function () {
           fraseAEnviar = [];
           console.log('Se empieza aquí');
+          usuariosPartida.push(socket.jsonUsuario);
           frase.push(arrayFrases[Math.floor(Math.random() * arrayFrases.length)])
           fraseSplit = frase[0].frase.split(' ');
           for (let i = 0; i < fraseSplit.length; i++){
             for(let o = 0; o < fraseSplit[i].length; o++){
-              // fraseAEnviar.push(fraseSplit[i][o]);
-              console.log(fraseSplit[i][o])
-              fraseAEnviar.push({letra: fraseSplit[i][o], estado: false})
+              fraseAEnviar.push({letra: fraseSplit[i][o].toLowerCase(), estado: false})
             }
           }
-          console.log('Frase a enviar', fraseAEnviar)
+          usuariosPartida[0].turno = true;
+          console.log('usuariosPartida es::', usuariosPartida)
+          io.emit('empiezaPartida', {
+            usuario: socket.jsonUsuario,
+            jugadoresEnPartida: usuariosPartida,
+            fraseCompleta: frase[0].frase,
+            pista: frase[0].pista,
+            splitteada: fraseSplit,
+            enviada: fraseAEnviar,
+            botones: abecedario
+          });
 
-          io.emit('empiezaPartida', {fraseCompleta: frase[0].frase,pista: frase[0].pista, splitteada: fraseSplit, enviada: fraseAEnviar, botones: abecedario});
 
           socket.on('letraNueva', function (letraNueva) {
             letrasDichas.push(letraNueva);
@@ -143,7 +151,7 @@ io.on('connection', (socket) => {
               if (letraNueva == fraseAEnviar[i].letra) {
                 fraseAEnviar[i].estado = true;
                 resultado.push(fraseAEnviar[i].letra)
-                io.emit('letraAcertada', {letra: letraNueva, estado: true});
+                io.emit('letraAcertada', fraseAEnviar);
               } else {
                 io.emit('letraErronea', {
                   letra: letraNueva, puntos: socket.jsonUsuario.puntos--
@@ -157,15 +165,15 @@ io.on('connection', (socket) => {
             //   })
             // }
           })
-          // socket.on('cambiameElTurno', function (data) {
-          //   if (data.turno == false) {
-          //     data.turno = true;
-          //   } else {
-          //     data.turno = false;
-          //   }
-          //   ;
-          //   socket.emit('turnoCambiado', data)
-          // });
+          socket.on('cambiameElTurno', function (data) {
+            if (data.turno == false) {
+              data.turno = true;
+            } else {
+              data.turno = false;
+            }
+            ;
+            socket.emit('turnoCambiado', data)
+          });
         })
 
       });

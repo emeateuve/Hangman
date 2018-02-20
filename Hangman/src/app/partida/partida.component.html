@@ -1,6 +1,6 @@
 <div class="container-fluid">
   <div *ngIf="partida" class="row">
-    <button type="button" (click)="cambiaTurno()">Cambiar turno.</button>
+    <button type="button" (click)="cambiaTurno(usuario)">Cambiar turno.</button>
     <div *ngIf="turnaso == true">
       <h1>Es tu turno {{usuario}}</h1>
     </div>
@@ -45,7 +45,7 @@
     <span *ngIf="cosica.estado">{{cosica.letra}} </span>
   </span>
   <h2>Pista: {{nuevaPista}}</h2>
-
+  <h1>El turno es: {{usuario.turno}}</h1>
 
 
 </div>
