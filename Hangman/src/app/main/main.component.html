@@ -7,7 +7,7 @@
           <label>Nombre de usuario: </label>
           <input type="text" name="nombreUsuario" [(ngModel)]="inputUsuario" class="form-control" placeholder="Usuario...">
         </div>
-        <button *ngIf="inputUsuario" type="button" class="btn btn-primary"><a (click)="enviarUsuario()" [routerLink]="['lobby']">Log in</a></button>
+        <button *ngIf="inputUsuario" type="button" class="btn btn-primary" (click)="enviarUsuario()" [routerLink]="['lobby']"><a>Log in</a></button>
       </form>
     </div>
     <p>Recuerda que tu nombre de usuario debe ser único</p>

@@ -1,4 +1,4 @@
-import {Component, OnInit} from '@angular/core';
+import {AfterViewInit, Component, OnInit} from '@angular/core';
 import {ChatService} from "../chat.service";
 
 @Component({
@@ -7,6 +7,7 @@ import {ChatService} from "../chat.service";
   styleUrls: ['./partida.component.css']
 })
 export class PartidaComponent implements OnInit {
+
 
   private abecedario = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h',
     'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's',
@@ -19,7 +20,7 @@ export class PartidaComponent implements OnInit {
   private nuevaFrase;
   private nuevaPista;
 
-  private frase = [];
+  private frase = '';
   private usuario: any;
   public arrayUsuarios = [];
   private incognita = '_';
@@ -44,16 +45,19 @@ export class PartidaComponent implements OnInit {
     this.partida = true;
     this.numeroTurno = 0;
 
-    this.chatService.nuevaPartida();
-    this.frase.push(this.chatService.mipolla);
+    // this.chatService.nuevaPartida();
     // this.chatService.recibeLetraCorrecta().subscribe((data) => {
     //   this.frase = data;
     // })
 
-    this.chatService.empezarPartida().subscribe((data) => {
+    this.chatService.empezarPartida();
+
+    this.chatService.empiezaPartida().subscribe((data) => {
+      console.log('data', data)
+      console.log('HOLI')
       this.nuevaFrase = data.frase;
       this.nuevaPista = data.pista;
-
+      console.log('Frase y pista', this.nuevaFrase, this.nuevaPista)
     })
 
     this.chatService.usuarioConectado().subscribe((data) => {
@@ -73,7 +77,10 @@ export class PartidaComponent implements OnInit {
       console.log('El turno es: ',this.jsonJugador.turno)
     })
 
+
+
     // this.chatService.usuarioEnJuego();
+
 
   }
 
@@ -116,10 +123,6 @@ export class PartidaComponent implements OnInit {
   //   this.puntuacion = this.puntuacion + 10;
   //   this.descomponer(this.arrayFrases[Math.floor(Math.random() * this.arrayFrases.length)].toLowerCase());
   // }
-
-
-
-
 
 
   // cambiaTurno(){

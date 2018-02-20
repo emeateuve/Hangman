@@ -112,13 +112,16 @@ io.on('connection', (socket) => {
 
           if (numeroListos == usuariosWaiting.length) {
             console.log('Se puede empezar la partida')
-            io.emit('empiezaPartida', arrayFrases[Math.floor(Math.random()*arrayFrases.length)]);
+            // io.emit('empiezaPartida', arrayFrases[Math.floor(Math.random()*arrayFrases.length)]);
+            io.emit('empiezaPartida');
           };
         });
 
         socket.on('nuevaPartida', function () {
           console.log('Se empieza aquí');
-          console.log(arrayFrases.length, ' frases en total')
+          io.emit('empiezaPartida', arrayFrases[Math.floor(Math.random()*arrayFrases.length)])
+          // io.emit('empiezaPartida');
+          // socket.emit('nuevaFrase', arrayFrases[Math.floor(Math.random()*arrayFrases.length)] )
         })
 
         socket.on('palabraNueva', function (data) {

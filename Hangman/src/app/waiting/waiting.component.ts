@@ -34,7 +34,7 @@ export class WaitingComponent implements OnInit {
       this.messages.push(message);
     });
 
-    this.chatService.empezarPartida().subscribe((data) =>{
+    this.chatService.empiezaPartida().subscribe((data) =>{
       this.router.navigate(['partida']);
     });
 

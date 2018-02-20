@@ -10,7 +10,7 @@ export class ChatService {
   private socket;
   public usuario;
   public arrayUsuarios = [];
-  public mipolla = 15;
+  public frase;
 
 
   constructor() {
@@ -74,7 +74,7 @@ export class ChatService {
     });
   }
 
-  /****************************JUEGO*********************************/
+  /****************************WAITING*********************************/
   public enviarJuego(usuario) {
     this.socket.emit('conectameAlWaiting', usuario)
   }
@@ -98,19 +98,34 @@ export class ChatService {
     this.socket.emit('usuarioEstaListo', usuario)
   }
 
-  public empezarPartida = () => {
+  public empiezaPartida = () => {
     return Observable.create((observer) => {
-      this.socket.on('empiezaPartida', function (data) {
+      this.socket.on('empiezaPartida', (data) => {
         observer.next(data);
-        this.mipolla = data
+        this.frase = data;
       })
     })
   };
 
-  /********************************PARTIDA*************************************/
-  public nuevaPartida(){
+
+
+  public empezarPartida = () => {
     this.socket.emit('nuevaPartida');
-  };
+  }
+
+  /********************************PARTIDA*************************************/
+  // public nuevaPartida(){
+  //   this.socket.emit('nuevaPartida');
+  // };
+
+  // public nuevaFrase = () => {
+  //   return Observable.create((observer) => {
+  //     this.socket.on('nuevaFrase', function (data) {
+  //       observer.next(data);
+  //       this.frase = data
+  //     })
+  //   })
+  // }
 
   public enviar_palabra(array_palabra) {
     this.socket.emit('palabraNueva', array_palabra);
