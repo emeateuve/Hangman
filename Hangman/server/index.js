@@ -19,7 +19,10 @@ var arrayFrases = [
   {frase: 'A quien madruga Dios le ayuda', pista: 'Al levantarse'},
   {frase: 'Dos no se pelean si uno no quiere', pista: 'Paz y amor'},
   {frase: 'Soy edicion limitada', pista: 'Buena autoestima'},
-  {frase: 'Ellas se lo gastan en ropa y ellos en tetas', pista: 'Presupuesto'}
+  {frase: 'Ellas se lo gastan en ropa y ellos en tetas', pista: 'Presupuesto'},
+  {frase: 'Puede ser mi gran noche', pista: '¿Qué pasará, qué misterio habrá?'},
+  {frase: 'pixeles', pista: 'Nacho dando clase'}
+
 ];
 
 var frase = [];
