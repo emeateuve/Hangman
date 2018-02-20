@@ -11,7 +11,7 @@ let io = socketIO(server);
 
 var abecedario = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h',
   'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's',
-  't', 'u', 'v', 'w', 'x', 'y', 'z', ' '];
+  't', 'u', 'v', 'w', 'x', 'y', 'z'];
 
 var arrayFrases = [
   {frase: 'A ver si me muero ya', pista: 'Lo que digo todos los días.'},
@@ -20,12 +20,12 @@ var arrayFrases = [
   {frase: 'Dos no se pelean si uno no quiere', pista: 'Paz y amor'},
   {frase: 'Soy edicion limitada', pista: 'Buena autoestima'},
   {frase: 'Ellas se lo gastan en ropa y ellos en tetas', pista: 'Presupuesto'},
-  {frase: 'Puede ser mi gran noche', pista: '¿Qué pasará, qué misterio habrá?'},
-  {frase: 'pixeles', pista: 'Nacho dando clase'}
-
+  {frase: 'Puede ser mi gran noche', pista: '¿Qué pasará, qué misterio habrá?'}
 ];
 
 var frase = [];
+var fraseSplit = [];
+var fraseAEnviar = [];
 var resultado = [];
 var letrasDichas = [];
 
@@ -117,69 +117,68 @@ io.on('connection', (socket) => {
             console.log('Se puede empezar la partida')
             // io.emit('empiezaPartida', arrayFrases[Math.floor(Math.random()*arrayFrases.length)]);
             io.emit('empiezaPartida');
-          };
+          }
+          ;
         });
 
         socket.on('nuevaPartida', function () {
+          fraseAEnviar = [];
           console.log('Se empieza aquí');
-          io.emit('empiezaPartida', arrayFrases[Math.floor(Math.random()*arrayFrases.length)])
-          // io.emit('empiezaPartida');
-          // socket.emit('nuevaFrase', arrayFrases[Math.floor(Math.random()*arrayFrases.length)] )
-        })
-
-        socket.on('palabraNueva', function (data) {
-          io.emit('enviarPalabra', data);
-          frase = data;
-          console.log('esta es la palabra desde el servidor', data);
-        });
-
-
-        socket.on('letraNueva', function (letraNueva) {
-          letrasDichas.push(letraNueva);
-          for (let i = 0; i < frase.length; i++) {
-            if (letraNueva == frase[i].letra) {
-              frase[i].estado = true;
-              resultado.push(frase[i].letra)
-              socket.emit('letraAcertada', {letra: letraNueva, estado: true});
-            } else {
-              socket.emit('letraErronea', {
-                letra: letraNueva,
-                puntos: socket.jsonUsuario.puntos--
-              }, socket.jsonUsuario.turno = false)
+          frase.push(arrayFrases[Math.floor(Math.random() * arrayFrases.length)])
+          fraseSplit = frase[0].frase.split(' ');
+          for (let i = 0; i < fraseSplit.length; i++){
+            for(let o = 0; o < fraseSplit[i].length; o++){
+              // fraseAEnviar.push(fraseSplit[i][o]);
+              console.log(fraseSplit[i][o])
+              fraseAEnviar.push({letra: fraseSplit[i][o], estado: false})
             }
           }
-          if (resultado.length == frase.length) {
-            io.emit('Ganador', {
-              usuario: socket.jsonUsuario.usuario,
-              resultado: resultado
-            })
-          }
+          console.log('Frase a enviar', fraseAEnviar)
+
+          io.emit('empiezaPartida', {fraseCompleta: frase[0].frase,pista: frase[0].pista, splitteada: fraseSplit, enviada: fraseAEnviar, botones: abecedario});
+
+          socket.on('letraNueva', function (letraNueva) {
+            letrasDichas.push(letraNueva);
+            for (let i = 0; i < fraseAEnviar.length; i++) {
+              if (letraNueva == fraseAEnviar[i].letra) {
+                fraseAEnviar[i].estado = true;
+                resultado.push(fraseAEnviar[i].letra)
+                io.emit('letraAcertada', {letra: letraNueva, estado: true});
+              } else {
+                io.emit('letraErronea', {
+                  letra: letraNueva, puntos: socket.jsonUsuario.puntos--
+                }, socket.jsonUsuario.turno = false)
+              }
+            }
+            // if (resultado.length == frase.length) {
+            //   io.emit('Ganador', {
+            //     usuario: socket.jsonUsuario.usuario,
+            //     resultado: resultado
+            //   })
+            // }
+          })
+          // socket.on('cambiameElTurno', function (data) {
+          //   if (data.turno == false) {
+          //     data.turno = true;
+          //   } else {
+          //     data.turno = false;
+          //   }
+          //   ;
+          //   socket.emit('turnoCambiado', data)
+          // });
         })
-        socket.on('cambiameElTurno', function (data) {
-          if (data.turno == false) {
-            data.turno = true;
-          } else {
-            data.turno = false;
-          }
-          ;
-          socket.emit('turnoCambiado', data)
-        });
 
       });
-
-
     }
+
     socket.on('disconnect', function () {
       let pos = arrayUsuarios.indexOf(socket.jsonUsuario.usuario);
       arrayUsuarios.splice(pos, 1);
       io.emit('desconexion', {
         msg: 'Se ha desconectado: ' + socket.jsonUsuario.usuario, array: arrayUsuarios
       })
-
     })
-
   });
-
 });
 
 server.listen(port, () => {

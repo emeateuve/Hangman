@@ -7,20 +7,16 @@ import {ChatService} from "../chat.service";
   styleUrls: ['./partida.component.css']
 })
 export class PartidaComponent implements OnInit {
-
-
-  private abecedario = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h',
-    'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's',
-    't', 'u', 'v', 'w', 'x', 'y', 'z', ' '];
-
-  /*
+    /*
   JSO: {'letraobj': X, 'estado': false}
    */
 
   private nuevaFrase;
   private nuevaPista;
+  private splitteada;
+  private enviada;
+  private abecedario;
 
-  private frase = '';
   private usuario: any;
   public arrayUsuarios = [];
   private incognita = '_';
@@ -55,9 +51,13 @@ export class PartidaComponent implements OnInit {
     this.chatService.empiezaPartida().subscribe((data) => {
       console.log('data', data)
       console.log('HOLI')
-      this.nuevaFrase = data.frase;
+      this.nuevaFrase = data.fraseCompleta;
       this.nuevaPista = data.pista;
-      console.log('Frase y pista', this.nuevaFrase, this.nuevaPista)
+      this.splitteada = data.splitteada;
+      this.enviada = data.enviada;
+      this.abecedario = data.botones;
+      console.log('Frase y pista', this.nuevaFrase, this.nuevaPista, this.splitteada)
+
     })
 
     this.chatService.usuarioConectado().subscribe((data) => {
@@ -77,11 +77,13 @@ export class PartidaComponent implements OnInit {
       console.log('El turno es: ',this.jsonJugador.turno)
     })
 
+    this.chatService.recibeLetraCorrecta().subscribe((data) => {
+      console.log('letra correcta supolla')
+    })
+  }
 
-
-    // this.chatService.usuarioEnJuego();
-
-
+  adivinaLetra(letra){
+    this.chatService.enviar_letra(letra);
   }
 
   // adivinaLetra(letra) {

@@ -127,9 +127,9 @@ export class ChatService {
   //   })
   // }
 
-  public enviar_palabra(array_palabra) {
-    this.socket.emit('palabraNueva', array_palabra);
-  };
+  // public enviar_palabra(array_palabra) {
+  //   this.socket.emit('palabraNueva', array_palabra);
+  // };
 
   public enviar_letra(letra) {
     this.socket.emit('letraNueva', letra);
@@ -141,8 +141,9 @@ export class ChatService {
 
   public recibeLetraCorrecta = () => {
     return Observable.create((observer) => {
-      this.socket.on('letraAcertadaDevuelta', function (data) {
+      this.socket.on('letraAcertada', function (data) {
         observer.next(data);
+        console.log('acertada lolxd')
         this.palabra = data;
       })
     })

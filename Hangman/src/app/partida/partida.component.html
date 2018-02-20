@@ -36,8 +36,14 @@
       <li>{{msg}}</li>
     </ul>
   </div>
+
+  <button *ngFor="let item of abecedario" type="button" (click)="adivinaLetra(item)">{{item}}</button>
+
   <h1>Frase:</h1>
-  <p *ngFor="let letra of nuevaFrase">-{{letra}}</p>
+  <span *ngFor="let cosica of enviada">
+    <span *ngIf="!cosica.estado">_ </span>
+    <span *ngIf="cosica.estado">{{cosica.letra}} </span>
+  </span>
   <h2>Pista: {{nuevaPista}}</h2>
 
 
