@@ -156,6 +156,13 @@ export class ChatService {
     })
   }
 
+  public returnLobby = () => {
+    return Observable.create((observer) => {
+      this.socket.on('returnLobby', function (data) {
+      })
+    })
+  }
+
   public consoleusuario(){
     this.socket.emit('consoleusuarios')
   }

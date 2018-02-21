@@ -1,4 +1,4 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, OnInit, OnDestroy} from '@angular/core';
 import {ChatService} from "../chat.service";
 
 @Component({
@@ -6,7 +6,13 @@ import {ChatService} from "../chat.service";
   templateUrl: './chatglobal.component.html',
   styleUrls: ['./chatglobal.component.css']
 })
-export class ChatglobalComponent implements OnInit {
+export class ChatglobalComponent implements OnInit, OnDestroy {
+
+  public usuarioConectadoChat;
+  public usuarioDesconectadoChat;
+  public getMessages;
+
+
   message: string;
   messages: string[] = [];
   usuariosChat = [];
@@ -18,17 +24,17 @@ export class ChatglobalComponent implements OnInit {
   ngOnInit() {
     console.log('acaba de entrar en el chat')
 
-    this.chatService.usuarioConectadoChat().subscribe((data) => {
+    this.usuarioConectadoChat = this.chatService.usuarioConectadoChat().subscribe((data) => {
       console.log('conectado al chat: ', data)
       this.usuariosChat = data.array;
       this.messages.push(data.msg)
     });
-    this.chatService.usuarioDesconectadoChat().subscribe((data) => {
+    this.usuarioDesconectadoChat = this.chatService.usuarioDesconectadoChat().subscribe((data) => {
       console.log('data del usuarioDesconectado() desde chat', data)
       this.messages.push(data.msg);
       this.usuariosChat = data.array
     });
-    this.chatService.getMessages().subscribe((message: string) => {
+    this.getMessages = this.chatService.getMessages().subscribe((message: string) => {
       this.messages.push(message);
     });
 
@@ -41,5 +47,11 @@ export class ChatglobalComponent implements OnInit {
     this.message = '';
   }
 
+  ngOnDestroy(){
+    this.usuarioDesconectadoChat.unsubscribe()
+    this.usuarioConectadoChat.unsubscribe()
+    this.getMessages.unsubscribe()
+
+  }
 
 }

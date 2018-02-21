@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import {ChatService} from "../chat.service";
 import {ActivatedRoute, Router, RouterModule} from '@angular/router';
 
@@ -7,9 +7,17 @@ import {ActivatedRoute, Router, RouterModule} from '@angular/router';
   templateUrl: './waiting.component.html',
   styleUrls: ['./waiting.component.css']
 })
-export class WaitingComponent implements OnInit {
+export class WaitingComponent implements OnInit, OnDestroy {
 
   constructor(private chatService: ChatService, private route: ActivatedRoute, private router: Router) { }
+
+  public usuarioConectadoWaiting;
+  public usuarioDesconectadoWaiting;
+  public empiezaPartida;
+  public getMessages;
+
+
+
 
   public usuariosConectados = [];
   messages: string[] = [];
@@ -19,32 +27,25 @@ export class WaitingComponent implements OnInit {
 
   ngOnInit() {
     this.partidaLista = false;
-    this.chatService.usuarioConectadoWaiting().subscribe((data) => {
+    this.usuarioConectadoWaiting = this.chatService.usuarioConectadoWaiting().subscribe((data) => {
       this.usuariosConectados = data.array;
       this.jugador = data.usuario;
       this.messages.push(data.msg)
       this.jsonJugador = data
     });
-    this.chatService.usuarioDesconectadoWaiting().subscribe((data) => {
+    this.usuarioDesconectadoWaiting = this.chatService.usuarioDesconectadoWaiting().subscribe((data) => {
       this.messages.push(data.msg);
       this.usuariosConectados = (data.array)
     });
 
-    this.chatService.getMessages().subscribe((message: string) => {
+    this.getMessages = this.chatService.getMessages().subscribe((message: string) => {
       this.messages.push(message);
     });
 
-    this.chatService.empiezaPartida().subscribe((data) =>{
+    this.empiezaPartida = this.chatService.empiezaPartida().subscribe((data) =>{
       this.router.navigate(['partida']);
     });
-
-    // this.chatService.usuarioEnJuego();
-    // this.mostrarArray();
   }
-
-  // mostrarArray(){
-  //   console.log('mostrar usuario conectados', this.usuariosConectados)
-  // }
 
   empezarPartida(){
     if(this.usuariosConectados.length >= 2){
@@ -55,6 +56,13 @@ export class WaitingComponent implements OnInit {
 
   estoyListo(usuario){
     this.chatService.usuarioListo(usuario);
+  }
+
+  ngOnDestroy(){
+    this.usuarioConectadoWaiting.unsubscribe();
+    this.usuarioDesconectadoWaiting.unsubscribe();
+    this.empiezaPartida.unsubscribe()
+    this.getMessages.unsubscribe()
   }
 
 }

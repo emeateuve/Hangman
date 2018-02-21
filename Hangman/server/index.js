@@ -131,12 +131,12 @@ io.on('connection', (socket) => {
             }
           }
 
-          usuariosPartida[0].turno = true;
+          usuariosPartida[usuariosPartida.length-1].turno = true;
 
 
           socket.emit('empiezaPartida', {
             usuario: socket.jsonUsuario,
-            // jugadoresEnPartida: usuariosPartida,
+            jugadoresEnPartida: usuariosPartida,
             fraseCompleta: frase[0].frase,
             pista: frase[0].pista,
             splitteada: fraseSplit,
@@ -162,31 +162,25 @@ io.on('connection', (socket) => {
             if(resultado.length == fraseAEnviar.length){
               io.emit('ganador', {jugador: socket.jsonUsuario.usuario, puntos: socket.jsonUsuario.puntos})
             }
-            // if (resultado.length == frase.length) {
-            //   io.emit('Ganador', {
-            //     usuario: socket.jsonUsuario.usuario,
-            //     resultado: resultado
-            //   })
-            // }
+            if (resultado.length == frase.length) {
+              io.emit('Ganador', {
+                usuario: socket.jsonUsuario.usuario,
+                resultado: resultado
+              })
+              io.emit('returnLobby')
+            }
           })
           socket.on('cambiameElTurno', function (data) {
-            console.log('ei k pasa Xd', data)
             data[0].turno = false;
             let primerValor = data.shift();
             data[0].turno = true;
             data.push(primerValor);
-
             io.emit('turnoCambiado', data)
           });
         })
 
       });
     }
-
-    socket.on('consoleusuarios', function () {
-      console.log('USUARIOS PARTIDA LOQUI', usuariosPartida)
-      socket.emit('usuariosPartidaDevuelta', usuariosPartida)
-    })
 
     socket.on('disconnect', function () {
       let pos = arrayUsuarios.indexOf(socket.jsonUsuario.usuario);

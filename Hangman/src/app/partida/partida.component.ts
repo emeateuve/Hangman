@@ -1,6 +1,6 @@
 import {AfterViewInit, Component, OnInit, OnDestroy} from '@angular/core';
 import {ChatService} from "../chat.service";
-
+import {ActivatedRoute, Router, RouterModule} from '@angular/router';
 @Component({
   selector: 'app-partida',
   templateUrl: './partida.component.html',
@@ -8,9 +8,11 @@ import {ChatService} from "../chat.service";
 })
 export class PartidaComponent implements OnInit, OnDestroy {
 
-  public empiezapartida;
-
-
+  public empiezaPartida;
+  public turnoCambiado;
+  public returnLobby;
+  public ganadorPartida;
+  public recibeLetraCorrecta;
 
   private nuevaFrase;
   private nuevaPista;
@@ -18,15 +20,18 @@ export class PartidaComponent implements OnInit, OnDestroy {
   private enviada;
   private abecedario;
   private usuariosPartida = [];
-  public usuariosPartidaTodos = [];
+  private valorTurno = 0;
 
   private usuario: any;
 
+  private puntuacion = 15;
   private partida = false;
+  messages: string[] = [];
 
 
 
-  constructor(private chatService: ChatService) {
+  constructor(private chatService: ChatService, private route: ActivatedRoute, private router: Router) {
+
   }
 
   ngOnInit() {
@@ -34,32 +39,33 @@ export class PartidaComponent implements OnInit, OnDestroy {
 
     this.chatService.empezarPartida();
 
-    this.empiezapartida = this.chatService.empiezaPartida().subscribe((data) => {
+    this.empiezaPartida = this.chatService.empiezaPartida().subscribe((data) => {
+      console.log('data', data)
       this.usuario = data.usuario;
-      this.usuariosPartida = this.usuariosPartidaTodos;
+      this.usuariosPartida = data.jugadoresEnPartida;
       this.nuevaFrase = data.fraseCompleta;
       this.nuevaPista = data.pista;
       this.splitteada = data.splitteada;
       this.enviada = data.enviada;
       this.abecedario = data.botones;
+
     })
 
-    this.chatService.turnoCambiado().subscribe((data) => {
-      this.usuariosPartidaTodos = data;
+    this.turnoCambiado = this.chatService.turnoCambiado().subscribe((data) => {
+      this.usuariosPartida = this.chatService.miscojones;
       this.usuario.turno = true;
     })
 
-    this.chatService.ganadorPartida().subscribe();
+    this.returnLobby = this.chatService.returnLobby().subscribe((data) =>{
+      this.router.navigate(['lobby']);
+    });
 
-    this.chatService.recibeLetraCorrecta().subscribe((data) => {
+    this.ganadorPartida = this.chatService.ganadorPartida().subscribe((data) =>{
+    });
+
+    this.recibeLetraCorrecta = this.chatService.recibeLetraCorrecta().subscribe((data) => {
       this.enviada = data;
     })
-
-    this.chatService.consoleusuario();
-
-    this.chatService.usuariosPartidaDevuelta().subscribe((data) => {
-      this.usuariosPartidaTodos = data
-    });
 
   }
   adivinaLetra(letra){
@@ -67,15 +73,15 @@ export class PartidaComponent implements OnInit, OnDestroy {
   }
 
 
-
   cambiaTurno(lista){
     this.chatService.cambiaTurnoSv(lista)
   }
+
   ngOnDestroy(){
-    this.empiezapartida.unsubscribe()
-
-
+    this.empiezaPartida.unsubscribe()
+    this.recibeLetraCorrecta.unsubscribe()
+    this.ganadorPartida.unsubscribe()
+    this.returnLobby.unsubscribe()
+    this.turnoCambiado.unsubscribe()
   }
 }
-
-
