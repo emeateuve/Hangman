@@ -12,6 +12,7 @@ export class ChatService {
   public arrayUsuarios = [];
   public frase;
   public miscojones;
+  public arrayPartida = [];
 
 
   constructor() {
@@ -119,23 +120,6 @@ export class ChatService {
   }
 
   /********************************PARTIDA*************************************/
-  // public nuevaPartida(){
-  //   this.socket.emit('nuevaPartida');
-  // };
-
-  // public nuevaFrase = () => {
-  //   return Observable.create((observer) => {
-  //     this.socket.on('nuevaFrase', function (data) {
-  //       observer.next(data);
-  //       this.frase = data
-  //     })
-  //   })
-  // }
-
-  // public enviar_palabra(array_palabra) {
-  //   this.socket.emit('palabraNueva', array_palabra);
-  // };
-
   public enviar_letra(letra) {
     this.socket.emit('letraNueva', letra);
   }
@@ -172,5 +156,18 @@ export class ChatService {
     })
   }
 
+  public consoleusuario(){
+    this.socket.emit('consoleusuarios')
+  }
+
+  public usuariosPartidaDevuelta(){
+    return Observable.create((observer) => {
+      this.socket.on('usuariosPartidaDevuelta', (data) => {
+        observer.next(data)
+        console.log('USUARIOSPARTIDADEVUELTA DESDE CHAT', data)
+        this.arrayPartida = data;
+      })
+    })
+  }
 
 }
