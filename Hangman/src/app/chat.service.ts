@@ -160,5 +160,13 @@ export class ChatService {
     })
   }
 
+  public ganadorPartida = () => {
+    return Observable.create((observer) => {
+      this.socket.on('ganador', function (data) {
+        alert('Ha ganado ' + data.jugador + ' con una puntuación de ' + data.puntos + ' puntos.')
+      })
+    })
+  }
+
 
 }

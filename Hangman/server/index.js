@@ -154,12 +154,17 @@ io.on('connection', (socket) => {
               if (letraNueva == fraseAEnviar[i].letra) {
                 fraseAEnviar[i].estado = true;
                 resultado.push(fraseAEnviar[i].letra)
+                socket.jsonUsuario.puntos++;
+                console.log(resultado, '<-Resultado')
                 io.emit('letraAcertada', fraseAEnviar);
               } else {
                 io.emit('letraErronea', {
                   letra: letraNueva, puntos: socket.jsonUsuario.puntos--
                 }, socket.jsonUsuario.turno = false)
               }
+            }
+            if(resultado.length == fraseAEnviar.length){
+              io.emit('ganador', {jugador: socket.jsonUsuario.usuario, puntos: socket.jsonUsuario.puntos})
             }
             // if (resultado.length == frase.length) {
             //   io.emit('Ganador', {
@@ -169,15 +174,15 @@ io.on('connection', (socket) => {
             // }
           })
           socket.on('cambiameElTurno', function (data) {
-            data[valorTurno].turno = false;
-            console.log('er data es ', data)
-            valorTurno = valorTurno + 1;
-            console.log(valorTurno, '<- ValorTurno')
+            console.log(valorTurno, '<- ValorTurno');
             data[valorTurno].turno = true;
+            console.log('er data es ', data)
             if (valorTurno == usuariosWaiting.length-1){
-              valorTurno = 0;
+              valorTurno = -1;
             }
-            io.emit('turnoCambiado', data)
+            valorTurno = valorTurno + 1;
+            data[valorTurno].turno = false;
+            socket.emit('turnoCambiado', data)
           });
         })
 

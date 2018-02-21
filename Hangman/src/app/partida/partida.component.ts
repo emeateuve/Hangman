@@ -60,6 +60,8 @@ export class PartidaComponent implements OnInit {
       this.valorTurno = this.valorTurno +1
     })
 
+    this.chatService.ganadorPartida().subscribe();
+
     this.chatService.recibeLetraCorrecta().subscribe((data) => {
       this.enviada = data;
     })
