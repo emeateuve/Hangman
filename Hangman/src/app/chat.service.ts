@@ -6,7 +6,7 @@ import {observable} from "rxjs/symbol/observable";
 
 
 export class ChatService {
-  private url = 'http://localhost:3000';
+  private url = '';
   private socket;
   public usuario;
   public arrayUsuarios = [];
@@ -16,7 +16,7 @@ export class ChatService {
 
 
   constructor() {
-    this.socket = io(this.url);
+    this.socket = io();
   }
 
   public sendUsuario(usuario) {

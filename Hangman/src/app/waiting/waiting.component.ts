@@ -23,7 +23,7 @@ export class WaitingComponent implements OnInit, OnDestroy {
   messages: string[] = [];
   jugador: any;
   public partidaLista;
-  private jsonJugador;
+  public jsonJugador;
 
   ngOnInit() {
     this.partidaLista = false;

@@ -2,7 +2,7 @@
 
 let express = require('express');
 let app = express();
-
+const publicPath = path.join(__dirname, './public');
 let http = require('http');
 let server = http.Server(app);
 

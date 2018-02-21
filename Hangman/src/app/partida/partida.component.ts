@@ -14,18 +14,18 @@ export class PartidaComponent implements OnInit, OnDestroy {
   public ganadorPartida;
   public recibeLetraCorrecta;
 
-  private nuevaFrase;
-  private nuevaPista;
-  private splitteada;
-  private enviada;
-  private abecedario;
-  private usuariosPartida = [];
-  private valorTurno = 0;
+  public nuevaFrase;
+  public nuevaPista;
+  public splitteada;
+  public enviada;
+  public abecedario;
+  public usuariosPartida = [];
+  public valorTurno = 0;
 
-  private usuario: any;
+  public usuario: any;
 
-  private puntuacion = 15;
-  private partida = false;
+  public puntuacion = 15;
+  public partida = false;
   messages: string[] = [];
 
 

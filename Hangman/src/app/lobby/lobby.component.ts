@@ -11,9 +11,9 @@ export class LobbyComponent implements OnInit {
   constructor(private servicioChat: ChatService) {
   }
 
-  private usuario: any;
-  private numeroSala: string;
-  private jsonLobby;
+  public usuario: any;
+  public numeroSala: string;
+  public jsonLobby;
 
   ngOnInit() {
 
