@@ -29,6 +29,8 @@ var fraseAEnviar = [];
 var resultado = [];
 var letrasDichas = [];
 var usuariosPartida = [];
+var valorTurno = 0;
+
 const port = process.env.PORT || 3000;
 
 var arrayUsuarios = [];
@@ -114,8 +116,6 @@ io.on('connection', (socket) => {
           usuariosListos.push(socket.jsonUsuario);
 
           if (numeroListos == usuariosWaiting.length) {
-            console.log('Se puede empezar la partida')
-            // io.emit('empiezaPartida', arrayFrases[Math.floor(Math.random()*arrayFrases.length)]);
             io.emit('empiezaPartida');
           }
           ;
@@ -123,7 +123,8 @@ io.on('connection', (socket) => {
 
         socket.on('nuevaPartida', function () {
           fraseAEnviar = [];
-          console.log('Se empieza aquí');
+
+          socket.jsonUsuario.turno = false
           usuariosPartida.push(socket.jsonUsuario);
           frase.push(arrayFrases[Math.floor(Math.random() * arrayFrases.length)])
           fraseSplit = frase[0].frase.split(' ');
@@ -132,8 +133,10 @@ io.on('connection', (socket) => {
               fraseAEnviar.push({letra: fraseSplit[i][o].toLowerCase(), estado: false})
             }
           }
+
           usuariosPartida[0].turno = true;
-          console.log('usuariosPartida es::', usuariosPartida)
+
+
           io.emit('empiezaPartida', {
             usuario: socket.jsonUsuario,
             jugadoresEnPartida: usuariosPartida,
@@ -166,13 +169,15 @@ io.on('connection', (socket) => {
             // }
           })
           socket.on('cambiameElTurno', function (data) {
-            if (data.turno == false) {
-              data.turno = true;
-            } else {
-              data.turno = false;
+            data[valorTurno].turno = false;
+            console.log('er data es ', data)
+            valorTurno = valorTurno + 1;
+            console.log(valorTurno, '<- ValorTurno')
+            data[valorTurno].turno = true;
+            if (valorTurno == usuariosWaiting.length-1){
+              valorTurno = 0;
             }
-            ;
-            socket.emit('turnoCambiado', data)
+            io.emit('turnoCambiado', data)
           });
         })
 

@@ -11,6 +11,7 @@ export class ChatService {
   public usuario;
   public arrayUsuarios = [];
   public frase;
+  public miscojones;
 
 
   constructor() {
@@ -135,8 +136,8 @@ export class ChatService {
     this.socket.emit('letraNueva', letra);
   }
 
-  public cambiaTurnoSv(usuario) {
-    this.socket.emit('cambiameElTurno', usuario)
+  public cambiaTurnoSv(lista) {
+    this.socket.emit('cambiameElTurno', lista)
   }
 
   public recibeLetraCorrecta = () => {
@@ -151,8 +152,10 @@ export class ChatService {
 
   public turnoCambiado = () => {
     return Observable.create((observer) => {
-      this.socket.on('turnoCambiado', function (data) {
+      this.socket.on('turnoCambiado', (data) => {
+        this.miscojones = data;
         observer.next(data);
+
       })
     })
   }
