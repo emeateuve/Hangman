@@ -41,14 +41,11 @@ var numeroListos = 0;
 
 
 io.on('connection', (socket) => {
-  console.log('user connected');
 
   socket.on('confirmarUsuario', (usuario) => {
     existeUsuario = arrayUsuarios.indexOf(usuario.usuario);
     if (existeUsuario >= 0) {
-      console.log('El usuario existe');
     } else {
-      console.log('El usuario no existe. Registro con éxito.', usuario.usuario);
       socket.jsonUsuario = {
         usuario: usuario.usuario,
         avatar: usuario.avatar,
@@ -80,7 +77,6 @@ io.on('connection', (socket) => {
       })
 
       socket.on('new-message', (message) => {
-        console.log(message);
         io.emit('new-message', socket.jsonUsuario.usuario + ': ' + message);
       });
       console.log('ArrayUsuarios ', arrayUsuarios);
@@ -125,13 +121,13 @@ io.on('connection', (socket) => {
           usuariosPartida.push(socket.jsonUsuario);
           frase.push(arrayFrases[Math.floor(Math.random() * arrayFrases.length)])
           fraseSplit = frase[0].frase.split(' ');
-          for (let i = 0; i < fraseSplit.length; i++){
-            for(let o = 0; o < fraseSplit[i].length; o++){
+          for (let i = 0; i < fraseSplit.length; i++) {
+            for (let o = 0; o < fraseSplit[i].length; o++) {
               fraseAEnviar.push({letra: fraseSplit[i][o].toLowerCase(), estado: false})
             }
           }
 
-          usuariosPartida[usuariosPartida.length-1].turno = true;
+          usuariosPartida[usuariosPartida.length - 1].turno = true;
 
 
           socket.emit('empiezaPartida', {
@@ -159,7 +155,7 @@ io.on('connection', (socket) => {
                 }, socket.jsonUsuario.turno = false)
               }
             }
-            if(resultado.length == fraseAEnviar.length){
+            if (resultado.length == fraseAEnviar.length) {
               io.emit('ganador', {jugador: socket.jsonUsuario.usuario, puntos: socket.jsonUsuario.puntos})
             }
             if (resultado.length == frase.length) {

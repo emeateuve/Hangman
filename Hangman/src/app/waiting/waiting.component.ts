@@ -49,7 +49,6 @@ export class WaitingComponent implements OnInit, OnDestroy {
 
   empezarPartida(){
     if(this.usuariosConectados.length >= 2){
-      console.log('Se puede empezar la partida');
       this.partidaLista = true;
     }
   }

@@ -22,15 +22,11 @@ export class ChatglobalComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
-    console.log('acaba de entrar en el chat')
-
     this.usuarioConectadoChat = this.chatService.usuarioConectadoChat().subscribe((data) => {
-      console.log('conectado al chat: ', data)
       this.usuariosChat = data.array;
       this.messages.push(data.msg)
     });
     this.usuarioDesconectadoChat = this.chatService.usuarioDesconectadoChat().subscribe((data) => {
-      console.log('data del usuarioDesconectado() desde chat', data)
       this.messages.push(data.msg);
       this.usuariosChat = data.array
     });

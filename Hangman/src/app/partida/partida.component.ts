@@ -40,7 +40,6 @@ export class PartidaComponent implements OnInit, OnDestroy {
     this.chatService.empezarPartida();
 
     this.empiezaPartida = this.chatService.empiezaPartida().subscribe((data) => {
-      console.log('data', data)
       this.usuario = data.usuario;
       this.usuariosPartida = data.jugadoresEnPartida;
       this.nuevaFrase = data.fraseCompleta;
@@ -52,7 +51,7 @@ export class PartidaComponent implements OnInit, OnDestroy {
     })
 
     this.turnoCambiado = this.chatService.turnoCambiado().subscribe((data) => {
-      this.usuariosPartida = this.chatService.miscojones;
+      this.usuariosPartida = this.chatService.array;
       this.usuario.turno = true;
     })
 

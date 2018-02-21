@@ -11,7 +11,7 @@ export class ChatService {
   public usuario;
   public arrayUsuarios = [];
   public frase;
-  public miscojones;
+  public array;
   public arrayPartida = [];
 
 
@@ -132,7 +132,6 @@ export class ChatService {
     return Observable.create((observer) => {
       this.socket.on('letraAcertada', function (data) {
         observer.next(data);
-        console.log('acertada lolxd')
         this.palabra = data;
       })
     })
@@ -141,7 +140,7 @@ export class ChatService {
   public turnoCambiado = () => {
     return Observable.create((observer) => {
       this.socket.on('turnoCambiado', (data) => {
-        this.miscojones = data;
+        this.array = data;
         observer.next(data);
 
       })
@@ -171,7 +170,6 @@ export class ChatService {
     return Observable.create((observer) => {
       this.socket.on('usuariosPartidaDevuelta', (data) => {
         observer.next(data)
-        console.log('USUARIOSPARTIDADEVUELTA DESDE CHAT', data)
         this.arrayPartida = data;
       })
     })
