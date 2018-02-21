@@ -59,13 +59,10 @@ io.on('connection', (socket) => {
         puntos: 10,
         ganador: false
       };
-      // socket.nombre_usuario = usuario.toLowerCase();
-      // socket.jsonUsuario.usuario = socket.nombre_usuario;
+
       arrayUsuarios.push(socket.jsonUsuario.usuario);
-
-      console.log('antes del emit de usuarioConectado')
-
       socket.emit('usuarioConectado', socket.jsonUsuario);
+
       /****************************************CHAT GLOBAL************************************************/
       socket.on('conectameAlChat', function (data) {
         usuariosChat.push(data.usuario);
@@ -137,7 +134,7 @@ io.on('connection', (socket) => {
           usuariosPartida[0].turno = true;
 
 
-          io.emit('empiezaPartida', {
+          socket.emit('empiezaPartida', {
             usuario: socket.jsonUsuario,
             jugadoresEnPartida: usuariosPartida,
             fraseCompleta: frase[0].frase,
@@ -155,7 +152,6 @@ io.on('connection', (socket) => {
                 fraseAEnviar[i].estado = true;
                 resultado.push(fraseAEnviar[i].letra)
                 socket.jsonUsuario.puntos++;
-                console.log(resultado, '<-Resultado')
                 io.emit('letraAcertada', fraseAEnviar);
               } else {
                 io.emit('letraErronea', {
@@ -174,15 +170,11 @@ io.on('connection', (socket) => {
             // }
           })
           socket.on('cambiameElTurno', function (data) {
-            console.log(valorTurno, '<- ValorTurno');
-            data[valorTurno].turno = true;
-            console.log('er data es ', data)
-            if (valorTurno == usuariosWaiting.length-1){
-              valorTurno = -1;
-            }
-            valorTurno = valorTurno + 1;
-            data[valorTurno].turno = false;
-            socket.emit('turnoCambiado', data)
+            data[0].turno = false;
+            let primerValor = data.shift();
+            data[0].turno = true;
+            data.push(primerValor);
+            io.emit('turnoCambiado', data)
           });
         })
 

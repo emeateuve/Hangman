@@ -35,7 +35,6 @@ export class PartidaComponent implements OnInit {
 
     this.chatService.empiezaPartida().subscribe((data) => {
       console.log('data', data)
-
       this.usuario = data.usuario;
       this.usuariosPartida = data.jugadoresEnPartida;
       this.nuevaFrase = data.fraseCompleta;
@@ -51,12 +50,14 @@ export class PartidaComponent implements OnInit {
 
     this.chatService.turnoCambiado().subscribe((data) => {
       this.usuariosPartida = this.chatService.miscojones;
-      console.log('data del turnoCambiado', data)
-      console.log('Desde el chat', this.chatService.miscojones);
-      this.valorTurno = this.valorTurno +1
-      if(this.valorTurno == this.usuariosPartida.length-1){
-        this.valorTurno = 0;
-      }
+      this.usuario.turno = true;
+
+      // console.log('data del turnoCambiado', data)
+      // console.log('Desde el chat', this.chatService.miscojones);
+      // this.valorTurno = this.valorTurno +1
+      // if(this.valorTurno == this.usuariosPartida.length-1){
+      //   this.valorTurno = 0;
+      // }
 
     })
 

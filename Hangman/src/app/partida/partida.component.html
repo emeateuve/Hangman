@@ -36,7 +36,7 @@
       <!--<li>{{msg}}</li>-->
     <!--</ul>-->
   <!--</div>-->
-    <button *ngIf="usuariosPartida[valorTurno].turno == true" type="button" (click)="cambiaTurno(usuariosPartida)">Cambiar turno.</button>
+    <button  type="button" (click)="cambiaTurno(usuariosPartida)">Cambiar turno.</button>
 <div>
   <button *ngFor="let item of abecedario" type="button" (click)="adivinaLetra(item)">{{item}}</button>
 </div>
@@ -47,10 +47,12 @@
     <span *ngIf="!cosica.estado">_ </span>
     <span *ngIf="cosica.estado">{{cosica.letra}} </span>
   </span>
+    <h1>Nombre de usuario: {{usuario.usuario}}</h1>
   <h2>Pista: {{nuevaPista}}</h2>
-  <h1>El turno es: {{usuariosPartida[valorTurno].turno}}</h1>
+  <h1>El turno es de: {{usuariosPartida[valorTurno].usuario}} ^^ {{usuariosPartida[valorTurno].turno}}</h1>
+    <!--<h1>¿Es mi turno? {{}}</h1>-->
 
-    <h1 *ngIf="usuariosPartida[valorTurno].turno" style="color: #fff;">ES TU TURNO COLEGUITA</h1>
+    <h1 *ngIf="usuariosPartida[valorTurno].usuario == usuario.usuario" style="color: #fff;">ES TU TURNO COLEGUITA</h1>
 
   </div>
 </div>
