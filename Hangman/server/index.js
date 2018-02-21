@@ -44,14 +44,14 @@ io.on('connection', (socket) => {
   console.log('user connected');
 
   socket.on('confirmarUsuario', (usuario) => {
-    existeUsuario = arrayUsuarios.indexOf(usuario);
+    existeUsuario = arrayUsuarios.indexOf(usuario.usuario);
     if (existeUsuario >= 0) {
       console.log('El usuario existe');
     } else {
-      console.log('El usuario no existe. Registro con éxito.', usuario);
+      console.log('El usuario no existe. Registro con éxito.', usuario.usuario);
       socket.jsonUsuario = {
-        usuario: usuario,
-        avatar: false,
+        usuario: usuario.usuario,
+        avatar: usuario.avatar,
         msg: false,
         array: arrayUsuarios,
         turno: false,

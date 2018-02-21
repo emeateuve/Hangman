@@ -18,3 +18,8 @@
 .centro button{
   background-color: #193740;
 }
+
+
+.seleccionado{
+  border: yellow 2px solid;
+}

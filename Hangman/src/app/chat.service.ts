@@ -23,6 +23,10 @@ export class ChatService {
     this.socket.emit('confirmarUsuario', usuario)
   }
 
+  public sendAvatar(avatar) {
+    this.socket.emit('enviarAvatar', avatar)
+  }
+
   public usuarioConectado = () => {
     return Observable.create((observer) => {
       this.socket.on('usuarioConectado', function (data) {

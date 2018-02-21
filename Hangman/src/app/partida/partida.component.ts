@@ -53,11 +53,11 @@ export class PartidaComponent implements OnInit {
       this.usuariosPartida = this.chatService.miscojones;
       console.log('data del turnoCambiado', data)
       console.log('Desde el chat', this.chatService.miscojones);
+      this.valorTurno = this.valorTurno +1
       if(this.valorTurno == this.usuariosPartida.length-1){
         this.valorTurno = 0;
       }
 
-      this.valorTurno = this.valorTurno +1
     })
 
     this.chatService.ganadorPartida().subscribe();

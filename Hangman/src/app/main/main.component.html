@@ -12,4 +12,8 @@
     </div>
     <p>Recuerda que tu nombre de usuario debe ser único</p>
   </div>
+  <div class="imagenes">
+    <img src="../../assets/hombre.svg" (click)="imagenSeleccionada(1)" [ngClass]="{'seleccionado': avatar==1}">
+    <img src="../../assets/mujer.svg" (click)="imagenSeleccionada(2)" [ngClass]="{'seleccionado': avatar==2}">
+  </div>
 </div>
